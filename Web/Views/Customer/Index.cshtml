@@ -1,0 +1,58 @@
+﻿@model CustomerListModel
+@{
+    ViewData["Title"] = "Index";
+    Layout = "~/Views/Shared/_AdminLayout.cshtml";
+}
+
+
+
+
+
+<ol class="breadcrumb mb-4">
+    <li class="breadcrumb-item active">Müşteri Listesi  </li>
+</ol>
+<table class="table table-striped">
+    <thead>
+        <tr>
+            <th>Müşteri ID</th>
+            <th>Ad</th>
+            <th>Soyad</th>
+            <th>Email</th>
+            <th>Telefon</th>
+            <th>Adres</th>
+            <th>Güncelle</th>
+            <th>Sil</th>
+            <th>Detaylar</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var customer in Model.Customers)
+        {
+            <tr>
+                <td>@customer.CustomerId</td>
+                <td>@customer.Name</td>
+                <td>@customer.SurName</td>
+                <td>@customer.Email</td>
+                <td>@customer.Phone</td>
+                <td>@customer.Adress</td>
+                <td>
+
+                    <a class="btn btn-primary btn-sm mr-2" style="background-color:darkgoldenrod" href="/Customer/CustomerUpdate/@customer.CustomerId">Güncelle</a>
+                </td>
+                <td>
+                    <form asp-controller="Customer" asp-action="CustomerDelete" method="post" onsubmit="return confirm('Müşteriyi silmek istediğinizden emin misiniz?');">
+                        <input type="hidden" name="customerId" value="@customer.CustomerId" />
+                        <button type="submit" class="btn btn-danger"> Sil </button>
+                    </form>
+                </td>
+                <td>
+                    <a class="btn btn-deault" style="background-color:lightcoral" href="/Customer/CustomerSales/@customer.CustomerId">Satış Geçmişi</a>
+
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>
+
+<a href="@Url.Action("CustomerCreate", "Customer")" class="btn btn-info">Müşteri Ekle</a>
+

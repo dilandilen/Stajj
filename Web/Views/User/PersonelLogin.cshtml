@@ -1,0 +1,22 @@
+﻿
+@*
+    For more information on enabling MVC for empty projects, visit http://go.microsoft.com/fwlink/?LinkID=397860
+*@
+@using Entity.dto
+@model LoginDto
+<div class="login-form login-form-left">
+	<div class="agile-row">
+		<h3>Personel Girişi</h3>
+		<div class="clear"></div>
+		<div class="login-agileits-top">
+			<form method="post" action="@Url.Action("PersonelLogin", "User")">
+				<input type="email" class="email" name="Email" Placeholder="Mailiniz" required="" />
+				<input type="password" class="password" name="Password" Placeholder="Şifreniz" required="" />
+				<input type="submit" value="Login">
+			</form>
+		</div>
+		<div class="login-agileits-bottom">
+			<h6><a href="@Url.Action("PasswordReset","User")">Şifremi Unuttum?</a></h6>
+		</div>
+	</div>
+</div>

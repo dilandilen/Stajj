@@ -1,0 +1,134 @@
+﻿@model OrderModel
+
+
+@{
+    ViewData["Title"] = "Checkout";
+    Layout = "~/Views/Shared/_CustomerPanelLayout.cshtml";
+}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta content="width=device-width, initial-scale=1.0" name="viewport">
+    <meta content="Free HTML Templates" name="keywords">
+    <meta content="Free HTML Templates" name="description">
+
+    <!-- Favicon -->
+    <link href="~/template/img/favicon.ico" rel="icon">
+
+    <!-- Google Web Fonts -->
+    <link rel="preconnect" href="https://fonts.gstatic.com">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@100;200;300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+
+    <!-- Font Awesome -->
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.10.0/css/all.min.css" rel="stylesheet">
+
+    <!-- Libraries Stylesheet -->
+    <link href="~/template/lib/owlcarousel/assets/owl.carousel.min.css" rel="stylesheet">
+
+    <!-- Customized Bootstrap Stylesheet -->
+    <link href="~/template/css/style.css" rel="stylesheet">
+</head>
+
+<body>
+    
+    <div class="container-fluid bg-secondary mb-5">
+        <div class="d-flex flex-column align-items-center justify-content-center" style="min-height: 300px">
+            <h1 class="font-weight-semi-bold text-uppercase mb-3">Ödeme</h1>
+            <div class="d-inline-flex">
+                <p class="m-0"><a href="/CustomerPanel/Index">Anasayfa</a></p>
+                <p class="m-0 px-2">-</p>
+                <p class="m-0">Ödeme</p>
+            </div>
+        </div>
+    </div>
+    <!-- Page Header End -->
+    <!-- Checkout Start -->
+                            {
+    <div class="container-fluid pt-5">
+        <div class="col-md-8">
+            <h4 class="mb-3">Şipariş Detayları</h4>
+            <form action="/Cart/Checkout" method="post">
+                <div class="row">
+                    <div class="col-md-6 mb-3">
+                        <label asp-for="@Model.FirstName">Ad</label>
+                        <input asp-for="@Model.FirstName" value="" class="form-control" />
+                    </div>
+                    <div class="col-md-6 mb-3">
+                        <label asp-for="@Model.LastName">Soyad</label>
+                        <input asp-for="@Model.LastName" value="" class="form-control" />
+                    </div>
+                </div>
+                <div class="mb-3">
+                    <label asp-for="@Model.Address">Adress</label>
+                    <textarea asp-for="@Model.Address" class="form-control"></textarea>
+                </div>
+                <div class="row">
+                    <div class="col-md-4 mb-3">
+                        <label asp-for="@Model.City">Şehir</label>
+                        <input asp-for="@Model.City" value="" class="form-control" />
+                    </div>
+                    <div class="col-md-4 mb-3">
+                        <label asp-for="@Model.Phone">Telefon</label>
+                        <input asp-for="@Model.Phone" value="" class="form-control" />
+                    </div>
+                    <div class="col-md-4 mb-3">
+                        <label asp-for="@Model.Email">Email</label>
+                        <input asp-for="@Model.Email" value="" class="form-control" />
+                    </div>
+                </div>
+            
+              
+                <button type="submit" class="btn btn-primary btn-lg btn-block">Şiparişi Tamamla </button>
+            </form>
+        </div>
+
+
+    </div>
+    <div class="col-md-4 mb-4">
+
+        <h4 class="mb-3">
+            <span class="text-muted">Your Cart</span>
+        </h4>
+        <ul class="list-group mb-3">
+            @foreach (var item in Model.CartModel.CartItems)
+            {
+                <li class="list-group-item d-flex justify-content-between">
+                    <div>
+                        <h6 class="my-0">
+                            @item.Name
+                            <small>x @item.Quantity</small>
+                        </h6>
+                    </div>
+                    <span class="text-muted">@item.Price TL</span>
+                </li>
+            }
+            <li class="list-group-item d-flex justify-content-between">
+                <span>Total (TL)</span>
+                <strong>@Model.CartModel.TotalPrice() TL</strong>
+            </li>
+        </ul>
+
+    </div>
+    <!-- Checkout End -->
+    <!-- Footer Start -->
+    <!-- Footer End -->
+    <!-- Back to Top -->
+    <a href="#" class="btn btn-primary back-to-top"><i class="fa fa-angle-double-up"></i></a>
+
+
+    <!-- JavaScript Libraries -->
+    <script src="https://code.jquery.com/jquery-3.4.1.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.bundle.min.js"></script>
+    <script src="~/template/lib/easing/easing.min.js"></script>
+    <script src="~/template/lib/owlcarousel/owl.carousel.min.js"></script>
+
+    <!-- Contact Javascript File -->
+    <script src="~/template/mail/jqBootstrapValidation.min.js"></script>
+    <script src="~/template/mail/contact.js"></script>
+
+    <!-- Template Javascript -->
+    <script src="~/template/js/main.js"></script>
+</body>
+
+</html>

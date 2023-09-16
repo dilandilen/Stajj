@@ -1,0 +1,55 @@
+﻿@model List<OrderListModel>
+
+
+
+@{
+    ViewData["Title"] = "Index";
+    Layout = "~/Views/Shared/_Index.cshtml";
+}
+
+   <div class="container-fluid bg-secondary mb-5">
+    <div class="d-flex flex-column align-items-center justify-content-center" style="min-height: 300px">
+        <h1 class="font-weight-semi-bold text-uppercase mb-3">Siparişlerim</h1>
+        <div class="d-inline-flex">
+            <p class="m-0"><a href="/CustomerPanel/Index">Anasayfa</a></p>
+            <p class="m-0 px-2">-</p>
+            <p class="m-0">Siparişlerim</p>
+        </div>
+    </div>
+</div>
+
+
+
+@if (Model.Count == 0)
+{
+    <p>Henüz siparişiniz yok.</p>
+}
+else
+{
+    <table class="table">
+        <thead>
+            <tr>
+                <th>Sipariş Numarası</th>
+                <th>Sipariş Tarihi</th>
+                <th>Müşteri Adı</th>
+                <th>Toplam Tutar</th>
+                <th></th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var orderModel in Model)
+            {
+                <tr>
+                    <td>@orderModel.OrderNumber</td>
+                    <td>@orderModel.OrderDate.ToShortDateString()</td>
+                    <td>@orderModel.FirstName @orderModel.LastName</td>
+                    <td>@orderModel.OrderItems.Sum(item => item.Price * item.Quantity)</td>
+                    <td>
+                        <a href="@Url.Action("OrderDetail", "Order", new { id = orderModel.OrderId })">Detaylar</a>
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+}
+

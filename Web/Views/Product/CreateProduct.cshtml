@@ -1,0 +1,76 @@
+﻿@model ProductModel
+
+@{
+    ViewBag.Title = "CreateProduct";
+    Layout = "~/Views/Shared/_AdminLayout.cshtml";
+}
+
+<br />
+<h2>
+    Yeni Ürün Ekle
+</h2>
+<br />
+@using (Html.BeginForm("CreateProduct", "Product", FormMethod.Post))
+{
+    <br />
+    <table class="table table-borderless">
+        <thead>
+            
+            <tr>
+                <th scope="col">
+                    @Html.HiddenFor(x => x.ProductId, new { @class = "form-control" })
+
+                    @Html.Label("Ürün Başlığını Giriniz")
+                    @Html.TextBoxFor(x => x.ProductName, new { @class = "form-control" })
+                </th>
+                <th scope="col">
+                    @Html.Label("Marka Başlığını Giriniz")
+                    @Html.TextBoxFor(x => x.Brandname, new { @class = "form-control" })
+                </th>
+
+                <th scope="col">
+
+
+                    @Html.Label("Stok Adetini Giriniz")
+                    @Html.TextBoxFor(x => x.Stock, new { @class = "form-control" })
+                </th>
+
+            </tr>
+
+            <tr>
+
+                <th scope="col">
+                    @Html.Label("Aliş fiyatını Giriniz")
+                    @Html.TextBoxFor(x => x.Cost_price, new { @class = "form-control" })
+                </th>
+                <th scope="col">
+                    @Html.Label("Satış  Fiyatını Giriniz")
+                    @Html.TextBoxFor(x => x.Selling_price, new { @class = "form-control" })
+                </th>
+                <th scope="col">
+                    @Html.Label("Görsel Yolunu Giriniz")
+                    @Html.TextBoxFor(x => x.imgurl  , new { @class = "form-control" })
+                </th>
+                <th scope="col">
+                    @Html.Label("Durumunu  Giriniz")
+                    @Html.TextBoxFor(x => x.State  , new { @class = "form-control" })
+                </th>
+            </tr>
+
+            <tr>
+
+                <th scope="col"> <button class="btn btn-info">Kaydet</button> </th>
+            </tr>
+
+            <tr>
+            </tr>
+            <tr>
+                <th scope="col"><a href="/Product/Index" class="btn btn-outline-primary"> Listeye Dön </a></th>
+            </tr>
+        </thead>
+    </table>
+
+
+
+}
+

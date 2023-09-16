@@ -1,0 +1,49 @@
+﻿@model SaleTransactionModel
+
+@{
+    ViewBag.Title = "SalesAdd";
+    Layout = "~/Views/Shared/_AdminLayout.cshtml";
+}
+
+
+
+<h2>Sales Add</h2>
+
+@using (Html.BeginForm("SalesAdd", "SaleTransaction", FormMethod.Post))
+{
+    @Html.ValidationSummary(true)
+
+    <div class="form-group">
+        @Html.LabelFor(m => m.Quantity)
+        @Html.TextBoxFor(m => m.Quantity, new { @class = "form-control" })
+        @Html.ValidationMessageFor(m => m.Quantity)
+    </div>
+
+
+
+    <div class="form-group">
+        @Html.HiddenFor(m => m.PersonelId)
+        <p>Personel seçin</p>
+
+        @Html.DropDownListFor(m => m.PersonelId, ViewBag.VPersonel as SelectList, "-- Select Personel --", new { @class = "form-control" })
+        @Html.ValidationMessageFor(m => m.PersonelId)
+    </div>
+
+    <div class="form-group">
+        @Html.HiddenFor(m => m.CustomerId)
+        <p>Müşteri seçin</p>
+
+        @Html.DropDownListFor(m => m.CustomerId, ViewBag.VCustomer as SelectList, "-- Select Customer --", new { @class = "form-control" })
+        @Html.ValidationMessageFor(m => m.CustomerId)
+    </div>
+
+    <div class="form-group">
+        @Html.HiddenFor(m => m.ProductId)
+        <p>Ürün seçin</p>
+
+        @Html.DropDownListFor(m => m.ProductId, ViewBag.VProduct as SelectList, "-- Select Product --", new { @class = "form-control" })
+        @Html.ValidationMessageFor(m => m.ProductId)
+    </div>
+
+    <button type="submit" class="btn btn-primary">Add Sale</button>
+}

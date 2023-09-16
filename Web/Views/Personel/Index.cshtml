@@ -1,0 +1,60 @@
+﻿@model PersonelListModel
+@{
+    ViewData["Title"] = "Index";
+    Layout = "~/Views/Shared/_AdminLayout.cshtml";
+}
+
+
+
+
+
+<ol class="breadcrumb mb-4">
+    <li class="breadcrumb-item active">Personel Listesi  </li>
+</ol>
+<table class="table table-bordered">
+    <thead>
+        <tr>
+            <th>Personel ID</th>
+            <th>Ad</th>
+            <th>Soyad</th>
+            <th>Email</th>
+            <th>Telefon</th>
+            <th>Role</th>
+            <th>Salary</th>
+            <th>Güncelle</th>
+            <th>Sil</th>
+            <th>Detaylar</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var personel in Model.Personels)
+        {
+            <tr>
+                <td>@personel.PersonelId</td>
+                <td>@personel.Name</td>
+                <td>@personel.SurName</td>
+                <td>@personel.Email</td>
+                <td>@personel.Phone</td>
+                <td>@personel.Role</td>
+                <td>@personel.Salary</td>
+                
+                <td>
+                    <a class="btn btn-primary btn-sm mr-2" style="background-color:darkgoldenrod" href="/Personel/PersonelUpdate/@personel.PersonelId">Güncelle</a>
+                </td>
+                <td>
+                    <form action="/Personel/PersonelDelete" method="post" style="display:inline;">
+                        <input type="hidden" name="PersonelId" value="@personel.PersonelId" />
+                        <button type="submit" class="btn btn-danger btn-sm">Delete</button>
+                    </form>
+                </td>
+                <td>
+                    <a class="btn btn-deault" style="background-color:lightcoral" href="/Personel/PersonelSales/@personel.PersonelId">Satış Geçmişi</a>
+
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>
+
+<a href="@Url.Action("PersonelAdd", "Personel")" class="btn btn-primary">Personel Ekle</a>
+

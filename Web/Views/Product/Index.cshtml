@@ -1,0 +1,72 @@
+﻿@using Web.Models
+@model ProductListModel
+
+@{
+    ViewData["Title"] = "Index";
+    Layout = "~/Views/Shared/_AdminLayout.cshtml";
+}
+
+<ol class="breadcrumb mb-4">
+    <li class="breadcrumb-item active">Ürünler Listesi  </li>
+</ol>
+<table class="table table-bordered" style="margin-top: 20px;">
+    <tr>
+        <th>ID</th>
+        <th>ÜRÜN ADI</th>
+        <th>STOCK</th>
+        <th>ALIŞ FİYATI</th>
+        <th>SATIŞ FİYATI</th>
+        <th>MARKA</th>
+        <th>KATEGORİ</th>
+        <th>ÜRÜN RESMİ</th>
+        <th>Güncelle</th>
+        <th>Sil</th>
+        <th>satıs</th>
+    </tr>
+    @foreach (var product in Model.Products)
+    {
+        <tr>
+            <td>@product.ProductId</td>
+            <td>@product.ProductName</td>
+            <td>@product.Stock</td>
+            <td>@product.Cost_price</td>
+            <td>@product.Selling_price</td>
+            <td>@product.Brandname</td>
+
+            <td>
+                @if (product.ProductCategories != null)
+                {
+                    @foreach (var category in product.ProductCategories.Select(pc => pc.Category))
+                    {
+                        @category.CategoryName
+                        @if (!category.Equals(product.ProductCategories.Last().Category))
+                        {
+                            <span>&nbsp;</span>
+                        }
+                    }
+                }
+            </td>
+
+            <td>
+                @if (!string.IsNullOrEmpty(product.imgurl))
+                {
+                    <img src="@Url.Content(product.imgurl)" alt="Product Image" style="max-width: 100px; max-height: 100px;" />
+                }
+                else
+                {
+                    <span>No Image</span>
+                }
+            </td>
+
+            <td> <a href="/Product/ProductUpdate/@product.ProductId" class="btn btn-warning"> Güncelle </a> </td>
+            <td>
+                <form asp-controller="Product" asp-action="ProductDelete" method="post" onsubmit="return confirm('Ürünü silmek istediğinizden emin misiniz?');">
+                    <input type="hidden" name="productId" value="@product.ProductId" />
+                    <button type="submit" class="btn btn-danger"> Sil </button>
+                </form>
+            </td>
+            <td> <a href="" class="btn btn-outline-primary"> Satış Yap </a> </td>
+        </tr>
+    }
+</table>
+<a href="/Product/CreateProduct" class="btn btn-info"> Kategori Ekle </a>

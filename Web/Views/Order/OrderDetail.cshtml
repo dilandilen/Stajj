@@ -1,0 +1,52 @@
+﻿@model Web.Models.OrderListModel
+
+@{
+    ViewData["Title"] = "Index";
+    Layout = "~/Views/Shared/_Index.cshtml";
+}
+
+<div class="container-fluid bg-secondary mb-5">
+    <div class="d-flex flex-column align-items-center justify-content-center" style="min-height: 300px">
+        <h1 class="font-weight-semi-bold text-uppercase mb-3">Sipariş Detayları</h1>
+        <div class="d-inline-flex">
+            <p class="m-0"><a href="/CustomerPanel/Index">Anasayfa</a></p>
+            <p class="m-0 px-2">-</p>
+            <p class="m-0">Sipariş Detayları</p>
+        </div>
+    </div>
+</div>
+
+<div>
+    <p>Sipariş Numarası: @Model.OrderNumber</p>
+    <p>Sipariş Tarihi: @Model.OrderDate.ToShortDateString()</p>
+    <p>Müşteri Adı: @Model.FirstName @Model.LastName</p>
+    <p>Adres: @Model.Address</p>
+    <p>Şehir: @Model.City</p>
+    <p>Sipariş Durumu: @Model.OrderState</p>
+</div>
+
+<div>
+    <h2>Sipariş Ürünleri</h2>
+    <table class="table">
+        <thead>
+            <tr>
+                <th>Ürün Adı</th>
+                <th>Fiyat</th>
+                <th>Miktar</th>
+                <th>Ürün Resmi</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var item in Model.OrderItems)
+            {
+                <tr>
+                    <td>@item.Name</td>
+                    <td>@item.Price</td>
+                    <td>@item.Quantity</td>
+                    <td><img src="@item.Image" height="75" width="50" alt="@item.Name" /></td>
+                </tr>
+            }
+        </tbody>
+    </table>
+</div>
+

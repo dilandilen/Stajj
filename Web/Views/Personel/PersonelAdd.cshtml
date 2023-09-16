@@ -1,0 +1,49 @@
+﻿@model PersonelModel
+@{
+    ViewData["Title"] = "PersonelAdd";
+    Layout = "~/Views/Shared/_AdminLayout.cshtml";
+}
+
+
+
+
+
+<h2>Personel Ekle</h2>
+
+@using (Html.BeginForm("PersonelAdd", "Personel", FormMethod.Post))
+{
+    @* Form alanları burada yer almalı *@
+    <div class="form-group">
+        @Html.HiddenFor(x => x.PersonelId)
+        @Html.LabelFor(x => x.Name, new { @class = "control-label" })
+        @Html.TextBoxFor(x => x.Name, new { @class = "form-control" })
+    </div>
+
+    <div class="form-group">
+        @Html.LabelFor(x => x.SurName, new { @class = "control-label" })
+        @Html.TextBoxFor(x => x.SurName, new { @class = "form-control" })
+    </div>
+
+    <div class="form-group">
+        @Html.LabelFor(x => x.Email, new { @class = "control-label" })
+        @Html.TextBoxFor(x => x.Email, new { @class = "form-control" })
+    </div>
+
+    <div class="form-group">
+        @Html.LabelFor(x => x.Phone, new { @class = "control-label" })
+        @Html.TextBoxFor(x => x.Phone, new { @class = "form-control" })
+    </div>
+
+    <div class="form-group">
+        @Html.LabelFor(x => x.Role, new { @class = "control-label" })
+        @Html.TextBoxFor(x => x.Role, new { @class = "form-control" })
+    </div>
+    <div class="form-group">
+        @Html.LabelFor(x => x.Salary, new { @class = "control-label" })
+        @Html.TextBoxFor(x => x.Salary, new { @class = "form-control" })
+    </div>
+   
+
+    <button type="submit" class="btn btn-primary">Kaydet</button>
+    <a href="@Url.Action("Index", "Personel")" class="btn btn-secondary">İptal</a>
+}

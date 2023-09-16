@@ -1,0 +1,33 @@
+﻿@using Entity
+@model IEnumerable<WishlistItem>
+@{
+    ViewData["Title"] = "Index";
+    Layout = "~/Views/Shared/_AdminLayout.cshtml";
+}
+
+
+<h1>Wishlist</h1>
+
+
+else
+{
+    <table class="table">
+        <thead>
+            <tr>
+                <th>Ürün Adı</th>
+                <th>Fiyat</th>
+                <th>İşlemler</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var item in Model)
+            {
+                
+                    <td>@item.ProductId</td>
+                    
+               
+            }
+        </tbody>
+    </table>
+}
+

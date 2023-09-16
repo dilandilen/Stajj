@@ -1,0 +1,72 @@
+﻿@model CategoryModel
+
+@{
+    ViewBag.Title = "CategoryUpdate";
+    Layout = "~/Views/Shared/_AdminLayout.cshtml";
+}
+<h1>Edit Category</h1>
+<hr />
+
+<div class="row">
+    <div class="col-md-4">
+        <form asp-controller="Category" asp-action="EditCategory" method="post" enctype="multipart/form-data">
+            <input type="hidden" name="CategoryID" value="@Model.CategoryID" />
+            <div class="form-group row">
+                <label asp-for="CategoryAd" class="col-md-2 col-form-label">Category Name:</label>
+                <div class="col-md-10">
+                    <input asp-for="CategoryAd" class="form-control" value="@Model.CategoryAd" />
+                </div>
+            </div>
+            <div class="form-group row">
+                <label asp-for="CategoryImage" class="col-md-2 col-form-label">Image:</label>
+                <div class="col-md-10">
+                    <input type="file" name="file" accept="image/*" />
+                </div>
+            </div>
+            <div class="form-group row">
+                <div class="col-md-10 offset-md-2">
+                    <button type="submit" class="btn btn-primary">Save Category</button>
+                </div>
+            </div>
+
+        </form>
+    </div>
+    <div class="col-md-8">
+        @if (Model.Products != null && Model.Products.Count > 0)
+        {
+            <table class="table table-bordered">
+                <thead>
+                    <tr>
+                        <th style="width:30px;">Id</th>
+                        <th>Name</th>
+                        <th style="width:12px;">Price</th>
+                        <th style="width:150px;"></th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var item in Model.Products)
+                    {
+                        <tr>
+                            <td>@item.ProductId</td>
+                            <td>@item.ProductName</td>
+                            <td>@item.Cost_price</td>
+                            <td>
+                                <form asp-controller="Category" asp-action="DeleteCategory" method="post" style="display:inline;">
+                                    <input type="hidden" name="productId" value="@item.ProductId" />
+                                    <input type="hidden" name="categoryId" value="@Model.CategoryID" />
+                                    <button type="submit" class="btn btn-danger btn-sm">Delete</button>
+                                </form>
+                            </td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        }
+        else
+        {
+            <div class="alert alert-warning">
+                <h4>No Products</h4>
+            </div>
+        }
+    </div>
+</div>

@@ -1,0 +1,26 @@
+﻿@using Entity.dto
+@model RegisterDto
+@addTagHelper *, Microsoft.AspNetCore.Mvc.TagHelpers
+
+
+<div class="login-form login-form-left">
+    <div class="agile-row">
+        <h3>Register form</h3>
+        <div class="login-agileits-top">
+
+            <form method="post" action="@Url.Action("SignIn", "User")">
+                <input type="text" class="FirstName" name="FirstName" Placeholder="Adınız" required="" />
+    <span class="text-danger" asp-validation-for="FirstName"></span>
+                <input type="text" class="LastName" name="LastName" Placeholder="Soy Adınız" required="" />
+                <input type="text" class="PhoneNumber" name="PhoneNumber" Placeholder="Telefon Numaranız" required="" />
+
+                <input type="email" class="Email" name="Email" Placeholder="Mail" required="" />
+                <input type="password" class="Password" name="Password" Placeholder="Şifre" required="" />
+                <div class="login-check">
+                    <label class="checkbox"><input type="checkbox" name="checkbox" checked=""><i> </i> I Accept to the <a href="#">Terms &amp; Conditions</a></label>
+                </div>
+                <input type="submit" value="Kayıt Ol">
+            </form>
+        </div>
+    </div>
+</div>

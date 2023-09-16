@@ -1,0 +1,50 @@
+﻿@model SaleTransactionListModel
+@{
+    ViewData["Title"] = "Index";
+    Layout = "~/Views/Shared/_AdminLayout.cshtml";
+}
+
+
+
+
+<ol class="breadcrumb mb-4">
+    <li class="breadcrumb-item active">Satış geçmişi   </li>
+</ol>
+<table class="table table-bordered">
+    <thead>
+        <tr>
+            <th> ID</th>
+            <th>Ürün</th>
+            <th>Cari</th>
+            <th>Personel</th>
+            
+            <th>Adet</th>
+            <th>Fiyat</th>
+            <th>Toplam</th>
+            <th>Tarih</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var sale in Model.SaleTransactions)
+        {
+            <tr>
+                <td>@sale.SalesId</td>
+                <td>@sale.Product.ProductName   </td>
+                <td>@sale.Customer.Name <span>&nbsp;</span> @sale.Customer.SurName</td>
+                <td>@sale.Personel.Name <span>&nbsp;</span> @sale.Personel.SurName</td>
+                <td>@sale.Quantity</td>
+                <td>@sale.Price</td>
+                <td>@sale.TotalAmount</td>
+                <td>@sale.Date</td>
+
+
+                
+               
+
+            </tr>
+        }
+    </tbody>
+</table>
+
+<a href="@Url.Action("SalesAdd", "SaleTransaction")" class="btn btn-primary">Satış Ekle</a>
+

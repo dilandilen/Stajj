@@ -1,0 +1,68 @@
+﻿@model IEnumerable<AdminOrderModel>
+
+@{
+    ViewData["Title"] = "AdminOrder";
+    Layout = "~/Views/Shared/_AdminLayout.cshtml";
+}
+
+<ol class="breadcrumb mb-4">
+    <li class="breadcrumb-item active">Kategoriler   </li>
+</ol>
+<table class="table table-bordered" style="margin-top: 20px;">
+
+
+                    <thead>
+                        <tr>
+                            <th>ID</th>
+
+                            <th>Sipariş Numarası</th>
+                            <th>Sipariş tarihi</th>
+                            <th>Sipariş durumu</th>
+                            <th>Toplam (₺)</th>
+                            <th>Ürün sayısı</th>
+
+
+                            <th></th>
+
+
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach (var item in Model)
+                        {
+                            <tr>
+                                <td>
+                                    @item.Id
+                                </td>
+                                <td>
+                                    @item.OrderNumber
+                                </td>
+                                <td>
+                                    @item.OrderDate
+                                </td>
+                                <td>
+                                    @item.OrderState
+                                </td>
+                                <td>
+                                    @item.Total
+                                </td>
+                                <td>
+                                    @item.Count
+                                </td>
+
+                                <td>
+                                    <a class="btn btn-primary btn-sm" href="@Url.Action("adminOrderDetail",new { id = item.Id } )"><i class="fa fa-fw fa-edit"></i>Detay</a>
+
+
+                                </td>
+                            </tr>
+                        }
+
+
+                    </tbody>
+                    <tfoot>
+                    </tfoot>
+                </table>
+       
+
+

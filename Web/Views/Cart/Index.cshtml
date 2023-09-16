@@ -1,0 +1,158 @@
+﻿@model CartModel
+
+@{
+    ViewData["Title"] = "Index";
+    Layout = "~/Views/Shared/_CustomerPanelLayout.cshtml";
+}
+
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8">
+    <meta content="width=device-width, initial-scale=1.0" name="viewport">
+    <meta content="Free HTML Templates" name="keywords">
+    <meta content="Free HTML Templates" name="description">
+
+    <!-- Favicon -->
+    <link href="img/favicon.ico" rel="icon">
+
+    <!-- Google Web Fonts -->
+    <link rel="preconnect" href="https://fonts.gstatic.com">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@100;200;300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+
+    <!-- Font Awesome -->
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.10.0/css/all.min.css" rel="stylesheet">
+
+    <!-- Libraries Stylesheet -->
+    <link href="lib/owlcarousel/assets/owl.carousel.min.css" rel="stylesheet">
+
+    <!-- Customized Bootstrap Stylesheet -->
+    <link href="css/style.css" rel="stylesheet">
+</head>
+
+<body>
+ 
+    <!-- Navbar End -->
+    <!-- Page Header Start -->
+    <div class="container-fluid bg-secondary mb-5">
+        <div class="d-flex flex-column align-items-center justify-content-center" style="min-height: 300px">
+            <h1 class="font-weight-semi-bold text-uppercase mb-3">Alışveriş Sepeti</h1>
+            <div class="d-inline-flex">
+                <p class="m-0"><a href="/Customerpanel/Index">Anasayfa</a></p>
+                <p class="m-0 px-2">-</p>
+                <p class="m-0">Alışveriş Sepeti </p>
+            </div>
+        </div>
+    </div>
+    <!-- Page Header End -->
+    <!-- Cart Start -->
+    @if (Model.CartItems.Count == 0)
+    {
+        <div class="row">
+            <div class="col-md-12">
+                <div class="alert alert-warning">Sepetinizde Ürün Yok</div>
+            </div>
+        </div>
+    }
+    else{
+       
+            <div class="container-fluid pt-5">
+                <div class="row px-xl-5">
+                    <div class="col-lg-8 table-responsive mb-5">
+                        <table class="table table-bordered text-center mb-0">
+                            <thead class="bg-secondary text-dark">
+                                <tr>
+                                    <th>Products</th>
+                                    <th>Price</th>
+                                    <th>Quantity</th>
+                                    <th>Total</th>
+                                    <th>Remove</th>
+                                </tr>
+                            </thead>
+                            <tbody class="align-middle">
+                            @foreach (var item in Model.CartItems)
+                            {
+                                <tr>
+                                    <td class="align-middle"><img src="img/product-1.jpg" alt="" style="width: 50px;"> @item.Name</td>
+                                    <td class="align-middle">@item.Price</td>
+                                    <td class="align-middle">
+                                        <div class="input-group quantity mx-auto" style="width: 100px;">
+                                            <div class="input-group-btn">
+                                                <button class="btn btn-sm btn-primary btn-minus">
+                                                    <i class="fa fa-minus"></i>
+                                                </button>
+                                            </div>
+                                            <input type="text" class="form-control form-control-sm bg-secondary text-center" value="@item.Quantity">
+                                            <div class="input-group-btn">
+                                                <button class="btn btn-sm btn-primary btn-plus">
+                                                    <i class="fa fa-plus"></i>
+                                                </button>
+                                            </div>
+                                        </div>
+                                    </td>
+                                    <td class="align-middle">@(item.Quantity * item.Price) </td>
+                                    <td>
+                                        <form asp-controller="Cart" asp-action="DeleteFromCart" method="post">
+                                            <input type="hidden" name="productId" value="@item.ProductId" />
+                                            <button type="submit" class="btn btn-sm btn-primary">
+                                                <i class="fa fa-times"></i>
+                                            </button>
+                                        </form>
+                                    </td>
+                                </tr>
+                                }
+                            </tbody>
+                        </table>
+                    </div>
+                    <div class="card border-secondary mb-5">
+                        <div class="card-header bg-secondary border-0">
+                            <h4 class="font-weight-semi-bold m-0">ALışveriş Sepeti Özeti</h4>
+                        </div>
+                    @{
+                        decimal total = Model.TotalPrice() + 10.0M;
+                    }
+                        <div class="card-body">
+                            <div class="d-flex justify-content-between mb-3 pt-1">
+                                <h6 class="font-weight-medium">Toplam</h6>
+                                <h6 class="font-weight-medium">@Model.TotalPrice().ToString("c")</h6>
+                            </div>
+                            <div class="d-flex justify-content-between">
+                                <h6 class="font-weight-medium">Kargo</h6>
+                                <h6 class="font-weight-medium">$10</h6>
+                            </div>
+                        </div>
+                        <div class="card-footer border-secondary bg-transparent">
+                            <div class="d-flex justify-content-between mt-2">
+                                <h5 class="font-weight-bold">Son Toplam</h5>
+                            <h5 class="font-weight-bold">@total.ToString("c")</h5>
+                            </div>
+                        <a href="/Cart/Checkout" class="btn btn-success pull-right">Alışverişi Tamamla <i class="icon-arrow-right"></i></a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <!-- Cart End -->
+            <!-- Footer Start -->
+            <!-- Footer End -->
+            <!-- Back to Top -->
+            <a href="#" class="btn btn-primary back-to-top"><i class="fa fa-angle-double-up"></i></a>
+        
+    }
+ 
+
+    <!-- JavaScript Libraries -->
+    <script src="https://code.jquery.com/jquery-3.4.1.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.bundle.min.js"></script>
+    <script src="lib/easing/easing.min.js"></script>
+    <script src="lib/owlcarousel/owl.carousel.min.js"></script>
+
+    <!-- Contact Javascript File -->
+    <script src="mail/jqBootstrapValidation.min.js"></script>
+    <script src="mail/contact.js"></script>
+
+    <!-- Template Javascript -->
+    <script src="js/main.js"></script>
+</body>
+
+</html>

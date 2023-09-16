@@ -1,0 +1,41 @@
+﻿@model CustomerModel
+@{
+    ViewData["Title"] = "CustomerUpdate";
+    Layout = "~/Views/Shared/_AdminLayout.cshtml";
+}
+
+<h2>Müşteri Güncelleme Alanı</h2>
+
+@using (Html.BeginForm("CustomerUpdate", "Customer", FormMethod.Post))
+{
+    <div class="form-group">
+        @Html.HiddenFor(x => x.CustomerId)
+        @Html.LabelFor(x => x.Name, new { @class = "control-label" })
+        @Html.TextBoxFor(x => x.Name, new { @class = "form-control" })
+    </div>
+
+    <div class="form-group">
+        @Html.LabelFor(x => x.SurName, new { @class = "control-label" })
+        @Html.TextBoxFor(x => x.SurName, new { @class = "form-control" })
+    </div>
+
+    <div class="form-group">
+        @Html.LabelFor(x => x.Email, new { @class = "control-label" })
+        @Html.TextBoxFor(x => x.Email, new { @class = "form-control" })
+    </div>
+
+    <div class="form-group">
+        @Html.LabelFor(x => x.Phone, new { @class = "control-label" })
+        @Html.TextBoxFor(x => x.Phone, new { @class = "form-control" })
+    </div>
+
+    <div class="form-group">
+        @Html.LabelFor(x => x.Adress, new { @class = "control-label" })
+        @Html.TextBoxFor(x => x.Adress, new { @class = "form-control" })
+    </div>
+
+   
+
+    <button type="submit" class="btn btn-info" style="background-color:yellowgreen"> Güncelle</button>
+    <a href="@Url.Action("Index", "Customer")" class="btn btn-secondary" style="background-color:mediumvioletred">İptal</a>
+}

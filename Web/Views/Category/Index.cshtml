@@ -1,0 +1,38 @@
+﻿@model CategoryListViewModel
+
+@{
+    ViewData["Title"] = "Index";
+    Layout = "~/Views/Shared/_AdminLayout.cshtml";
+}
+
+
+
+<ol class="breadcrumb mb-4">
+    <li class="breadcrumb-item active">Kategoriler   </li>
+</ol>
+<table class="table table-bordered" style="margin-top: 20px;">
+    <tr>
+        <th>ID</th>
+        <th>Kategori ADI</th>
+        <th>Güncelle</th>
+        <th>Sil</th>
+    </tr>
+    @foreach (var k in Model.Categories)
+    {
+        <tr>
+            <td>@k.CategoryID</td>
+            <td>@k.CategoryName</td>
+            <td>
+                <a class="btn btn-success btn-sm mr-2" href="/Category/EditCategory/@k.CategoryID">Edit</a>
+            </td>
+            <td>
+                <form action="/Category/DeleteCategory" method="post" style="display:inline;">
+                    <input type="hidden" name="categoryId" value="@k.CategoryID" />
+                    <button type="submit" class="btn btn-danger" onclick="return confirm('Kategoriyi silmek istediğinizden emin misiniz?')">Delete</button>
+                </form>
+            </td>
+        </tr>
+    }
+   
+</table>
+<a href="/Category/CreateCategory" class="btn btn-warning"> Kategori Ekle </a>

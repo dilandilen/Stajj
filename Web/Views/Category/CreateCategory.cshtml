@@ -1,0 +1,17 @@
+﻿@model CategoryModel
+@{
+    ViewData["Title"] = "CreateCategory";
+    Layout = "~/Views/Shared/_AdminLayout.cshtml";
+}
+<br/>
+<h2>Create a new Category</h2>
+<br />
+
+<form class="form-group" method="post">
+    @Html.LabelFor(x=>x.CategoryAd)
+    @Html.TextBoxFor(x=>x.CategoryAd,new{  @class="form control"})
+<br/>
+
+<button class="btn btn-info">KAYDET</button>
+</form>
+
