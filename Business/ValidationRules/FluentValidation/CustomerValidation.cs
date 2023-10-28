@@ -11,7 +11,6 @@ public class CustomerValidator : AbstractValidator<Customer>
         RuleFor(c => c.Email).NotEmpty().WithMessage("E-posta adresi boş olamaz.");
         RuleFor(c => c.Email).EmailAddress().WithMessage("Geçerli bir e-posta adresi giriniz.");
         RuleFor(c => c.Phone).NotEmpty().WithMessage("Telefon numarası boş olamaz.");
-        RuleFor(c => c.Phone).Must(BeAValidPhoneNumber).WithMessage("Geçerli bir telefon numarası giriniz (11 haneli).");
         RuleFor(c => c.Adress).NotEmpty().WithMessage("Adres alanı boş olamaz.");
     }
 

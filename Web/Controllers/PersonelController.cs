@@ -1,6 +1,6 @@
 ﻿using Business.Abstract;
 using Business.Concrete;
-using DataAccess.EntityFramework.EfCore;
+using DataAccess.Concrete.EntityFramework;
 using Entity;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -26,57 +26,37 @@ namespace Web.Controllers
         public IActionResult Index()
         {
             var personels = _personelService.GetAll();
-            var viewModel = new PersonelListModel
+            if (personels.Success)
             {
-                Personels = personels.Data
-            };
-            return View(viewModel);
+                return View(personels.Data);
+            }
+            return BadRequest();
         }
 
         public IActionResult PersonelDetails(int id)
         {
             var personel = _personelService.GetById(id);
-            if (personel == null)
+            if (personel.Success)
             {
-                return NotFound();
+                return View(personel.Data);
             }
 
-            var model = new PersonelModel
-            {
-                PersonelId = personel.Data.PersonelId,
-                Name = personel.Data.Name,
-                SurName = personel.Data.SurName,
-                Email = personel.Data.Email,
-                Phone = personel.Data.Phone,
-                Role = personel.Data.Role,
-                Salary = personel.Data.Salary
-            };
 
-            return View(model);
+            return BadRequest();
         }
 
         [HttpGet]
         public IActionResult PersonelAdd()
         {
-            var model = new PersonelModel();
-            return View(model);
+            return View();
         }
 
         [HttpPost]
-        public IActionResult PersonelAdd(PersonelModel model)
+        public IActionResult PersonelAdd(Personel model)
         {
           
-                var personel = new Personel
-                {
-                    Name = model.Name,
-                    SurName = model.SurName,
-                    Email = model.Email,
-                    Phone = model.Phone,
-                    Role = model.Role,
-                    Salary = model.Salary
-                };
 
-                _personelService.Create(personel);
+                _personelService.Create(model);
                 return RedirectToAction("Index");
            
         }
@@ -85,45 +65,27 @@ namespace Web.Controllers
         public IActionResult PersonelUpdate(int id)
         {
             var personel = _personelService.GetById(id);
-            if (personel == null)
+            if (personel.Success)
             {
-                return NotFound();
+
+                
+                return View(personel.Data);
+
             }
-
-            var model = new PersonelModel
-            {
-                PersonelId = personel.Data.PersonelId,
-                Name = personel.Data.Name,
-                SurName = personel.Data.SurName,
-                Email = personel.Data.Email,
-                Phone = personel.Data.Phone,
-                Role = personel.Data.Role,
-                Salary = personel.Data.Salary
-            };
-
-            return View(model);
+            return BadRequest();
         }
 
         [HttpPost]
-        public IActionResult PersonelUpdate(PersonelModel model)
+        public IActionResult PersonelUpdate(Personel model)
         {
             
-                var personel = _personelService.GetById(model.PersonelId);
-                if (personel == null)
-                {
-                    return NotFound();
-                }
+              
+                _personelService.Update(model);
+            
 
-                personel.Data.Name = model.Name;
-                personel.Data.SurName = model.SurName;
-                personel.Data.Email = model.Email;
-                personel.Data.Phone = model.Phone;
-                personel.Data.Role = model.Role;
-            personel.Data.Salary = model.Salary;
 
-                _personelService.Update(personel.Data);
-
-                return RedirectToAction("Index");
+            return RedirectToAction("Index");
+             
             
 
         }
@@ -133,39 +95,31 @@ namespace Web.Controllers
         public IActionResult PersonelDelete(int PersonelId)
         {
             var personel = _personelService.GetById(PersonelId);
-            if (personel != null)
+            if (personel.Success)
             {
                 _personelService.Delete(personel.Data);
-            }
+                return RedirectToAction("Index");
 
-            return RedirectToAction("Index");
+            }
+            return BadRequest();
         }
         [HttpGet]
         public IActionResult PersonelSales(int id)
         {
-            var personel = _personelService.GetByIdWithSales(id);
-            if (personel == null)
-            {
-                return NotFound();
-            }
+            var personel = _personelService.GetByIdWithSales(id).Data.Name;
+            ViewBag.personel=personel;
 
             var personelSales = _saleTransService.GetSalesByEmployee(id);
-            var viewModel = new PersonelSalesModel
-            {
-                Personel = personel.Data,
-                SaleTransactions = personelSales.Data
-            };
+           
 
-            return View(viewModel);
+            return View(personelSales.Data);
         }
         public IActionResult PersonelDetail()
         {
             var personels = _personelService.GetAll();
-            var viewModel = new PersonelListModel
-            {
-                Personels = personels.Data
-            };
-            return View(viewModel);
+           if(personels.Success)
+            return View(personels.Data);
+           else return BadRequest();
         }
       
     }

@@ -1,4 +1,4 @@
-﻿@model CategoryModel
+﻿@model Entity.Category
 
 @{
     ViewBag.Title = "CategoryUpdate";
@@ -12,13 +12,13 @@
         <form asp-controller="Category" asp-action="EditCategory" method="post" enctype="multipart/form-data">
             <input type="hidden" name="CategoryID" value="@Model.CategoryID" />
             <div class="form-group row">
-                <label asp-for="CategoryAd" class="col-md-2 col-form-label">Category Name:</label>
+                <label asp-for="CategoryName" class="col-md-2 col-form-label">Kategori Adı:</label>
                 <div class="col-md-10">
-                    <input asp-for="CategoryAd" class="form-control" value="@Model.CategoryAd" />
+                    <input asp-for="CategoryName" class="form-control" value="@Model.CategoryName" />
                 </div>
             </div>
             <div class="form-group row">
-                <label asp-for="CategoryImage" class="col-md-2 col-form-label">Image:</label>
+                <label asp-for="Imgurl" class="col-md-2 col-form-label">Image:</label>
                 <div class="col-md-10">
                     <input type="file" name="file" accept="image/*" />
                 </div>
@@ -32,7 +32,7 @@
         </form>
     </div>
     <div class="col-md-8">
-        @if (Model.Products != null && Model.Products.Count > 0)
+        @if (ViewBag.Products != null && ViewBag.Products.Count > 0)
         {
             <table class="table table-bordered">
                 <thead>
@@ -44,7 +44,7 @@
                     </tr>
                 </thead>
                 <tbody>
-                    @foreach (var item in Model.Products)
+                    @foreach (var item in ViewBag.Products)
                     {
                         <tr>
                             <td>@item.ProductId</td>

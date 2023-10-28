@@ -1,7 +1,6 @@
 ﻿using Business.Abstract;
 using Entity;
 using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Mvc;
 using System.Linq;
 using Web.Models;
@@ -24,11 +23,8 @@ namespace Web.Controllers
             var categories = _categoryService.GetAll();
             if (categories.Success)
             {
-                var viewModel = new CategoryListViewModel
-                {
-                    Categories = categories.Data
-                };
-                return View(viewModel);
+
+                return View(categories.Data);
             }
             return BadRequest(categories.Message);
         }
@@ -40,15 +36,11 @@ namespace Web.Controllers
         }
 
         [HttpPost]
-        public IActionResult CreateCategory(CategoryModel model)
+        public IActionResult CreateCategory(Category model)
         {
-          
-                var entity = new Category
-                {
-                    CategoryName = model.CategoryAd,
-                };
-            
-            var result=    _categoryService.Create(entity);
+
+
+            var result = _categoryService.Create(model);
             if (result.Success)
             {
                 return RedirectToAction("Index");
@@ -60,55 +52,22 @@ namespace Web.Controllers
         [HttpGet]
         public IActionResult EditCategory(int id)
         {
-            var category = _categoryService.GetByIdWithProducts(id);
-            if (category == null)
-            {
-                return NotFound();
-            }
-
-            var model = new CategoryModel
-            {
-                CategoryID = category.Data.CategoryID,
-                CategoryAd = category.Data.CategoryName,
-                Products = category.Data.ProductCategories?.Select(pc => pc.Product)?.ToList() 
-
-            };
-
-            return View(model);
+            var category = _categoryService.GetByIdWithProducts(id).Data;
+          
+            ViewBag.Products = category.ProductCategories?.Select(pc => pc.Product)?.ToList();
+            return View(category);
         }
 
 
         [HttpPost]
-        public IActionResult EditCategory(CategoryModel model, IFormFile file)
+        public IActionResult EditCategory(Category model, IFormFile file)
         {
-            var entity = _categoryService.GetById(model.CategoryID);
-            if (entity == null)
-            {
-                return NotFound();
-            }
-
-            entity.Data.CategoryName = model.CategoryAd;
-
-            if (file != null && file.Length > 0)
-            {
-
-
-                string uniqueFileName = Guid.NewGuid().ToString() + "_" + file.FileName;
-                string filePath = Path.Combine("wwwroot", "images", uniqueFileName);
-
-                using (var stream = new FileStream(filePath, FileMode.Create))
-                {
-                    file.CopyTo(stream);
-                }
-
-                entity.Data.Imgurl = "/images/" + uniqueFileName; 
-            }
-
-          var result=  _categoryService.Update(entity.Data);
+            var result = _categoryService.Update(model, file);
             if (result.Success)
             {
                 return RedirectToAction("Index");
-            }return BadRequest(result);
+            }
+            return BadRequest(result);
         }
 
         [HttpPost]
@@ -116,24 +75,15 @@ namespace Web.Controllers
         {
             var entity = _categoryService.GetById(categoryId);
 
-            
-              var result=  _categoryService.Delete(entity.Data);
+
+            var result = _categoryService.Delete(entity.Data);
             if (result.Success)
             {
 
                 return RedirectToAction("Index");
-            }return BadRequest(result.Message);
+            }
+            return BadRequest(result.Message);
         }
-        [HttpPost]
-        public IActionResult DeleteFromCategory(int categoryId, int productId)
-        {
-            _categoryService.DeleteFromCategory(categoryId, productId);
-            return Redirect("/admin/editcategory/" + categoryId);
-        }
-        public PartialViewResult _Categories()
-        {
-            return PartialView(new CategoryListViewModel() { Categories = _categoryService.GetAllCategoryWithProduct().Data })
-;        }
     }
    
 }

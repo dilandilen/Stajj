@@ -6,7 +6,7 @@ using Business.Concrete;
 using Business.Utilities.Intercepter;
 using Castle.DynamicProxy;
 using DataAccess.Abstract;
-using DataAccess.EntityFramework.EfCore;
+using DataAccess.Concrete.EntityFramework.EfCore;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -45,8 +45,9 @@ namespace Business.DependencyResolvers.Auttofac
             builder.RegisterType<CartManager>().As<ICartService>();
             builder.RegisterType<OrderDal>().As<IOrderDal>();
             builder.RegisterType<OrderService>().As<IOrderService>();
+            builder.RegisterType<WishlistDal>().As<IWishlistRepo>();
 
-
+            builder.RegisterType<WishlistService>().As<IWishlistService>();
 			var assembly = System.Reflection.Assembly.GetExecutingAssembly();
 
             builder.RegisterAssemblyTypes(assembly).AsImplementedInterfaces()

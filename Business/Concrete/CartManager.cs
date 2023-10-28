@@ -1,6 +1,6 @@
 ﻿using Business.Abstract;
 using DataAccess.Abstract;
-using DataAccess.EntityFramework.EfCore;
+using DataAccess.Concrete.EntityFramework;
 using Entity;
 using System;
 using System.Collections.Generic;
@@ -59,11 +59,11 @@ namespace Business.Concrete
             return _cartRepository.GetByUserId(userId);
         }
 
-        public void InitializeCart(string userId)
+        public void InitializeCart(int userId)
         {
             _cartRepository.Create(new Cart()
             {
-                UserId = userId
+                UserId = userId.ToString(),
             });
         }
     }

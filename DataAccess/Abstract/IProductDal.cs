@@ -4,7 +4,6 @@ namespace DataAccess.Abstract
 {
     public interface IProductDal : IRepository<Product>
     {
-        List<Product> GetProductsByCategory(string category, int page, int pageSize);
         List<Product> GetAllWithCategories();
         Product GetProductDetails(int id);
 

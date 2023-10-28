@@ -1,7 +1,7 @@
-﻿
+﻿﻿
 
 
-@model CategoryListViewModel
+@model IEnumerable<Category>
 
 @{
     ViewData["Title"] = "CategoryList";
@@ -11,13 +11,13 @@
 <h2>Kategoriler</h2>
 
 <div class="row">
-    @foreach (var category in Model.Categories)
+    @foreach (var category in Model)
     {
         <div class="col-md-3">
             <div class="category-item">
                 <a href="/CustomerPanel/ProductList/@category.CategoryID">
                     <img src="@category.Imgurl" alt="@category.CategoryName" style="width: 250px; height: 250px; max-width: 100%; max-height: 100%;" class="img-responsive" />
-                <h3>@category.CategoryName</h3>
+                    <h3>@category.CategoryName</h3>
             </div>
         </div>
     }

@@ -1,4 +1,4 @@
-﻿@model SaleTransactionListModel
+﻿@model  IEnumerable< SaleTransaction>
 @{
     ViewData["Title"] = "Index";
     Layout = "~/Views/Shared/_AdminLayout.cshtml";
@@ -25,7 +25,7 @@
         </tr>
     </thead>
     <tbody>
-        @foreach (var sale in Model.SaleTransactions)
+        @foreach (var sale in Model)
         {
             <tr>
                 <td>@sale.SalesId</td>

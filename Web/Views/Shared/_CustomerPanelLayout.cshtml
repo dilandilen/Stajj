@@ -80,17 +80,16 @@
             <div class="col-lg-3 col-6 text-right">
                 <a href="/Wishlist/Index" class="btn border">
                     <i class="fas fa-heart text-primary"></i>
-                    <span class="badge">0</span>
+                    <span class="badge"></span>
                 </a>
                 <a href="/Cart/Index" class="btn border">
                     <i class="fas fa-shopping-cart text-primary"></i>
-                    <span class="badge">0</span>
+                    <span class="badge"></span>
                 </a>
             </div>
         </div>
     </div>
-    <!-- Topbar End -->
-    <!-- Navbar Start -->
+
     <div class="container-fluid mb-5">
         <div class="row border-top px-xl-5">
             <div class="col-lg-3 d-none d-lg-block">
@@ -99,6 +98,7 @@
                     <i class="fa fa-angle-down text-dark"></i>
                 </a>
                 <nav class="collapse show navbar navbar-vertical navbar-light align-items-start p-0 border border-top-0 border-bottom-0" id="navbar-vertical">
+                    @await Component.InvokeAsync("Categories")
                 </nav>
             </div>
             <div class="col-lg-9">
@@ -117,34 +117,9 @@
                             <a href="detail.html" class="nav-item nav-link">Kargo Takip</a>
 
                             <a href="@Url.Action("CategoryList", "CustomerPanel")" class="nav-item nav-link">Kategorilerimiz</a>
+                            @await Component.InvokeAsync(typeof(Web.Viewcomponent.User))
 
-                            <div class="nav-item dropdown">
-                                @if (User.Identity!.IsAuthenticated)
-                                {
-                                    <a href="@Url.Action(  "User","EditProfile")" class="nav-link dropdown-toggle" data-toggle="dropdown">Hesabım</a>
-                                    <div class="dropdown-menu rounded-0 m-0">
-                                        <a href="@Url.Action(  "EditProfile","User")" class="dropdown-item">Profil Ayarları</a>
-                                        <a href="@Url.Action(  "Profile","User")" class="dropdown-item">Profilim</a>
-                                        <a href="@Url.Action(  "EditPassword","User")" class="dropdown-item">Şifreyi değiştir</a>
-
-                                        <a href="checkout.html" class="dropdown-item">Begendiklerim</a>
-                                        <li><a class="dropdown-item" asp-route-returnurl="/CustomerPanel/Index" asp-controller="User" asp-action="logout">Çıkış yap</a></li>
-
-                                    </div>
-                                    @if (User.HasClaim(x => x.Type == ClaimTypes.Role && (x.Value == "Admin" || x.Value == "Admin1" || x.Value == "Admin3")))
-                                    {
-                                        <li><a class="dropdown-item" asp-area="admin" asp-controller="Category" asp-action="Index">Admin</a></li>
-                                        <li><a class="dropdown-item" asp-route-returnurl="/CustomerPanel/Index" asp-controller="User" asp-action="logout">Çıkış yap</a></li>
-                                    }
-
-
-                                }
-                                else
-                                {
-                                    <a href="@Url.Action(  "Index","User")" class="dropdown-item">Giriş</a>
-
-                                }
-                            </div>
+                              
 
                             <a href="contact.html" class="nav-item nav-link">İletişim</a>
                         </div>

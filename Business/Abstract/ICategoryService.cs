@@ -1,5 +1,6 @@
 ﻿using Business.Utilities.Result;
 using Entity;
+using Microsoft.AspNetCore.Http;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -18,10 +19,9 @@ namespace Business.Abstract
     IDataResult<List<Category>> List();
 
     Iresult Create(Category entity);
-        Iresult  Update(Category entity);
+        Iresult  Update(Category entity, IFormFile file);
         Iresult  Delete(Category entity);
     
         IDataResult<Category> GetByIdWithProducts(int id);
-        Iresult DeleteFromCategory(int categoryId, int productId);
     }
 }

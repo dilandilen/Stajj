@@ -1,8 +1,8 @@
 ﻿using Business.Abstract;
+using DataAccess.Authentication;
 using Entity;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
-using Web.Authentication;
 using Web.Models;
 
 namespace Web.Controllers
@@ -24,36 +24,9 @@ namespace Web.Controllers
         {
             var userıd = _userManager.GetUserId(User);
             var orders = _orderService.GetOrders(userıd).ToList();
-            var orderListModel = new List<OrderListModel>();
 
-            OrderListModel orderModel;
 
-            foreach (var order in orders)
-            {
-                orderModel = new OrderListModel();
-                orderModel.OrderId = order.Id;
-                orderModel.OrderNumber = order.OrderNumber;
-                orderModel.OrderDate = order.OrderDate;
-                orderModel.OrderNote = order.OrderNote;
-                orderModel.Phone = order.Phone;
-                orderModel.FirstName = order.FirstName;
-                orderModel.LastName = order.LastName;
-                orderModel.Email = order.Email;
-                orderModel.Address = order.Address;
-                orderModel.City = order.City;
-
-                orderModel.OrderItems = order.OrderItems.Select(i => new OrderItemModel()
-                {
-                    OrderItemId = i.Id,
-                    Name = i.Product.ProductName,
-                    Price = (decimal)i.Price,
-                    Quantity = i.Quantity,
-                    ImageUrl = i.Product.imgurl
-                }).ToList();
-                orderListModel.Add(orderModel);
-            }
-
-            return View(orderListModel);
+            return View(orders);
         }
         public IActionResult OrderDetail(int id)
         {
@@ -64,28 +37,9 @@ namespace Web.Controllers
                 return NotFound();
             }
 
-            var orderDetailModel = new OrderListModel()
-            {
-                OrderNumber = order.OrderNumber,
-                OrderDate = order.OrderDate,
-                FirstName = order.FirstName,
-                LastName = order.LastName,
-                OrderState = order.OrderState,
-                Address = order.Address,
-                City = order.City,
-                OrderItems = order.OrderItems.Select(i => new OrderItemModel
-                {
-                    Name = i.Product.ProductName,
-                    Price = (decimal)i.Price,
-                    Quantity = i.Quantity,
-                    ProductId = i.ProductId,
-                    Image = i.Product.imgurl,
+           
 
-
-                }).ToList()
-            };
-
-            return View(orderDetailModel);
+            return View(order);
         }
         public IActionResult AdminOrder() {
             var orders = _orderService.GetAllWithOrderLines().Select(i => new AdminOrderModel()
@@ -105,34 +59,8 @@ namespace Web.Controllers
         {
             var order = _orderService.GetByIdWithOrderItems(id);
 
-            if (order == null)
-            {
-                return NotFound();
-            }
 
-            var orderDetailModel = new OrderListModel()
-            {
-                OrderId = order.Id,
-                OrderNumber = order.OrderNumber,
-                OrderDate = order.OrderDate,
-                FirstName = order.FirstName,
-                LastName = order.LastName,
-                OrderState = order.OrderState,
-                Address = order.Address,
-                City = order.City,
-                OrderItems = order.OrderItems.Select(i => new OrderItemModel
-                {
-                    Name = i.Product.ProductName,
-                    Price = (decimal)i.Price,
-                    Quantity = i.Quantity,
-                    ProductId = i.ProductId,
-                    Image = i.Product.imgurl,
-
-
-                }).ToList()
-            };
-
-            return View(orderDetailModel);
+            return View(order);
         }
         [HttpPost]
         public ActionResult UpdateOrderState(int OrderId, EnumOrderState OrderState)
@@ -150,58 +78,25 @@ namespace Web.Controllers
         }
         public ActionResult BekleyenSiparisler()
         {
-            var orders = _orderService.GetAll().Where(i => i.OrderState == EnumOrderState.Bekleniyor).Select(i => new AdminOrderModel()
-            {
-                Id = i.Id,
-                OrderNumber = i.OrderNumber,
-                OrderDate = i.OrderDate,
-                OrderState = i.OrderState,
-                Total = i.Total,
-                Count = i.OrderItems.Count,
-
-            }).OrderByDescending(i => i.OrderDate).ToList();
-            return View(orders);
+            var orders = _orderService.BekleyenSiparişler();
+            
+             return View(orders);
         }
         public ActionResult KargolananSiparisler()
         {
-            var orders = _orderService.GetAll().Where(i => i.OrderState == EnumOrderState.Kargolandı).Select(i => new AdminOrderModel()
-            {
-                Id = i.Id,
-                OrderNumber = i.OrderNumber,
-                OrderDate = i.OrderDate,
-                OrderState = i.OrderState,
-                Total = i.Total,
-                Count = i.OrderItems.Count,
+            var orders = _orderService.Kargo();
 
-            }).OrderByDescending(i => i.OrderDate).ToList();
             return View(orders);
         }
         public ActionResult TamamlananSiparisler()
         {
-            var orders = _orderService.GetAll().Where(i => i.OrderState == EnumOrderState.Tamamlandı).Select(i => new AdminOrderModel()
-            {
-                Id = i.Id,
-                OrderNumber = i.OrderNumber,
-                OrderDate = i.OrderDate,
-                OrderState = i.OrderState,
-                Total = i.Total,
-                Count = i.OrderItems.Count,
-
-            }).OrderByDescending(i => i.OrderDate).ToList();
+            var orders = _orderService.tamam();
             return View(orders);
         }
         public ActionResult PaketlenenSiparisler()
         {
-            var orders = _orderService.GetAll().Where(i => i.OrderState == EnumOrderState.Paketlendi).Select(i => new AdminOrderModel()
-            {
-                Id = i.Id,
-                OrderNumber = i.OrderNumber,
-                OrderDate = i.OrderDate,
-                OrderState = i.OrderState,
-                Total = i.Total,
-                Count = i.OrderItems.Count,
+            var orders = _orderService.paket();
 
-            }).OrderByDescending(i => i.OrderDate).ToList();
             return View(orders);
         }
 

@@ -1,4 +1,4 @@
-﻿ @model TodoListViewModel
+﻿ @model IEnumerable<TodoList>
 @{
     ViewData["Title"] = "Index";
     Layout = "~/Views/Shared/_AdminLayout.cshtml";
@@ -125,7 +125,7 @@
               <!-- /.card-header -->
               <div class="card-body">
                 <ul class="todo-list" data-widget="todo-list">
-                    @foreach(var k in Model.TodoLists){
+                    @foreach(var k in Model){
                   <li>
                     <!-- drag handle -->
                     <span class="handle">

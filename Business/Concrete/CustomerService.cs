@@ -3,7 +3,7 @@ using Business.Aspect.Autofac.Validation;
 using Business.Utilities.Result;
 using Business.ValidationRules.FluentValidation;
 using DataAccess.Abstract;
-using DataAccess.EntityFramework.EfCore;
+using DataAccess.Concrete.EntityFramework;
 using Entity;
 using System;
 using System.Collections.Generic;

@@ -22,11 +22,11 @@ namespace Web.Controllers
         {
             var products = _productService.GetAllWithCategories();
 
-            var viewModel = new ProductListModel
+            if (products.Success)
             {
-                Products = products.Data
-            };
-            return View(viewModel);
+                return View(products.Data);
+            }
+            else { return BadRequest(); }
         }
     }
 }

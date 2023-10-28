@@ -23,51 +23,35 @@ namespace Web.Controllers
         public IActionResult Index()
         {
             var faturalar = _ınvoiceService.GetAll();
-            var viewModel = new InvoiceListModel
-            {
-                Invoices = faturalar.Data
-            };
-            return View(viewModel);
+            if(faturalar.Success)
+            return View(faturalar.Data);
+            else return BadRequest();
         }
         [HttpGet]
         public IActionResult CreateInvoice()
         {
-            var model = new InvoiceModel();
-            return View(model);
+            return View();
         }
 
         [HttpPost]
-        public IActionResult CreateInvoice(InvoiceModel model)
+        public IActionResult CreateInvoice(Invoice model)
         {
+            model.Clock = DateTime.Now.ToString("HH:mm");
 
-            var entity = new Invoice
-            {
-       InvoiceSerialNo= model.InvoiceSerialNo,
-      InvoiceOrderNo= model.InvoiceOrderNo,
-Date=DateTime.Now,
-TaxAdministration=model.TaxAdministration,
-Clock = DateTime.Now.ToString("HH:mm"),
-Sum=model.Sum,
-Received=model.Received,
-Delivered=model.Delivered,
-
-        };
-            _ınvoiceService.Create(entity);
+         _ınvoiceService.Create(model);
             return RedirectToAction("Index");
 
 
         }
         [HttpGet]
         
+        
         public ActionResult InvoicePenDetail(int id)
         {
-            var fatura =_ınvoiceService.GetByIdWithItems(id);
-            var values =_ınvoiceItemService.GetInvoiceItemsByInvoice(id).Data.ToList();
-            var viewModel = new InvoiceItemandInvoiceModel
-            {
-                Invoice = fatura.Data,
-              InvoiceItems = values
-            }; return View(viewModel);
+            var values = _ınvoiceItemService.GetInvoiceItemsByInvoice(id).Data.ToList();
+
+            return View(values);
+
         }
     }
 }

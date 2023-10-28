@@ -1,4 +1,4 @@
-﻿@model Web.Models.OrderListModel
+﻿@model Order
 
 @{
     ViewData["Title"] = "Index";
@@ -40,10 +40,10 @@
             @foreach (var item in Model.OrderItems)
             {
                 <tr>
-                    <td>@item.Name</td>
+                    <td>@item.Product.ProductName</td>
                     <td>@item.Price</td>
                     <td>@item.Quantity</td>
-                    <td><img src="@item.Image" height="75" width="50" alt="@item.Name" /></td>
+                    <td><img src="@item.Product.imgurl" height="75" width="50" alt="@item.Product.ProductName" /></td>
                 </tr>
             }
         </tbody>

@@ -1,7 +1,7 @@
 ﻿using Business.Abstract;
 using Business.Utilities.Result;
 using DataAccess.Abstract;
-using DataAccess.EntityFramework.EfCore;
+using DataAccess.Concrete.EntityFramework;
 using Entity;
 using System;
 using System.Collections.Generic;
@@ -27,8 +27,23 @@ namespace Business.Concrete
         {
             _orderDal.Update(order);
         }
-
-       public Order GetByIdWithOrderItems(int orderıd)
+       public List<Order> BekleyenSiparişler()
+        {
+            return _orderDal.BekleyenSiparişler();
+        }
+        public List<Order> Kargo()
+        {
+            return _orderDal.Kargo();
+        }
+        public List<Order> tamam()
+        {
+            return _orderDal.tamam();
+        }
+         public List<Order> paket()
+        {
+            return _orderDal.paket();
+        }
+        public Order GetByIdWithOrderItems(int orderıd)
         {
            return _orderDal.GetByIdWithOrderItems(orderıd);
         }

@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Entity;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.Linq;
@@ -16,13 +17,13 @@ namespace Web.Models
         public string Phone { get; set; }
         public string Email { get; set; }
    
-        public CartModel CartModel { get; set; }
+        public Cart CartModel { get; set; }
     }
     public class OrderViewModel
     {
         public int OrderId { get; set; }
         public DateTime OrderDate { get; set; }
         public decimal TotalPrice { get; set; }
-        public List<CartItemModel> cartItems { get; set; }
+        public List<CartItem> cartItems { get; set; }
     }
 }

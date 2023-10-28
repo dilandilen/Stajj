@@ -1,33 +1,49 @@
-﻿@using Entity
-@model IEnumerable<WishlistItem>
+﻿@model Wishlist
 @{
     ViewData["Title"] = "Index";
-    Layout = "~/Views/Shared/_AdminLayout.cshtml";
+    Layout = "~/Views/Shared/_CustomerPanelLayout.cshtml";
 }
 
-
-<h1>Wishlist</h1>
-
-
-else
+@if (Model.Items.Count == 0)
 {
-    <table class="table">
-        <thead>
-            <tr>
-                <th>Ürün Adı</th>
-                <th>Fiyat</th>
-                <th>İşlemler</th>
-            </tr>
-        </thead>
-        <tbody>
-            @foreach (var item in Model)
-            {
-                
-                    <td>@item.ProductId</td>
-                    
-               
-            }
-        </tbody>
-    </table>
+    <div class="row">
+        <div class="col-md-12">
+            <div class="alert alert-warning"> Ürün Yok</div>
+        </div>
+    </div>
 }
+else{
+@foreach (var k in Model.Items)
+{
+    <div class="col-lg-4 col-md-6 col-sm-12 pb-1">
+        <div class="card product-item border-0 mb-4">
+            <div class="card-header product-img position-relative overflow-hidden bg-transparent border p-0">
+                <img class="img-fluid w-100" src="@Url.Content(k.Product.imgurl)" alt="@k.Product.ProductName">
+            </div>
+            <div class="card-body border-left border-right text-center p-0 pt-4 pb-3">
+                <h6 class="text-truncate mb-3">@k.Product.ProductName</h6>
+                <div class="d-flex justify-content-center">
+                    <h6>@k.Product.Selling_price</h6><h6 class="text-muted ml-2"><del>@k.Product.ProductName</del></h6>
+                </div>
+            </div>
+            <div class="card-footer d-flex justify-content-between bg-light border">
 
+                <a href="@Url.Action("ProductDetails", "CustomerPanel", new { id = @k.ProductId })" class="btn btn-sm text-dark p-0">
+                    <i class="fas fa-eye text-primary mr-1"></i> Ürün detayları
+                </a>
+                <form asp-controller="Cart" asp-action="AddToCart" method="post">
+                    <input type="hidden" name="ProductId" value="@k.ProductId" />
+                    <input type="hidden" name="Quantity" value="1" />
+                    <button type="submit" class="btn btn-sm text-dark p-0"><i class="fas fa-shopping-cart text-primary mr-1"></i>Sepete Ekle</button>
+
+                </form>
+                    <form asp-controller="Wishlist" asp-action="DeleteFromCart" method="post">
+                        <input type="hidden" name="productId" value="@k.ProductId" />
+                        <button type="submit" class="btn btn-sm btn-primary">
+                            <i class="fa fa-times"></i> Beğendiklerimden çıkart
+                        </button>
+                    </form>
+            </div>
+        </div>
+    </div>
+}}

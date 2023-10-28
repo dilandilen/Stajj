@@ -1,14 +1,14 @@
-﻿@model ProductListModel
+﻿@model IEnumerable<Product>
 @{
     ViewData["Title"] = "Search";
     Layout = "~/Views/Shared/_CustomerPanelLayout.cshtml";
 }
 
 <div class="search-results">
-    @if (Model.Products.Any())
+    @if (Model.Any())
     {
         <ul>
-            @foreach (var k in Model.Products)
+            @foreach (var k in Model)
             {
                 <div class="col-lg-4 col-md-6 col-sm-12 pb-1">
                     <div class="card product-item border-0 mb-4">

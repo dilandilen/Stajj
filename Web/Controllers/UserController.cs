@@ -1,23 +1,23 @@
 ﻿using Business.Abstract;
 using Business.Concrete;
 using Entity;
-using Entity.dto;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using System.Net.Mail;
 using System.Net;
 using System.Web;
-using Web.Authentication;
-using Web.Models;
 using Castle.Core.Smtp;
 using Microsoft.AspNetCore.WebUtilities;
 using System.Text;
-using Web.Models;
 using Microsoft.AspNetCore.Authorization;
+using Web.Viewcomponent;
+using DataAccess.Authentication;
+using Entity.dto;
+using Microsoft.EntityFrameworkCore.Migrations;
 
 namespace Web.Controllers
 {
- 
+
 
     public class UserController : Controller
 	{
@@ -25,14 +25,18 @@ namespace Web.Controllers
 		private readonly ICustomerService _customerService;
 		readonly SignInManager<AppUser> _signInManager;
         private readonly IPersonelService _personelService;
-		public UserController(UserManager<AppUser> userManager,ICustomerService customerService, SignInManager<AppUser> signInManager,IPersonelService personelService
-            )
-		{_personelService = personelService;
-			_userManager = userManager;
-			_customerService = customerService;
-			_signInManager = signInManager;
-		}
-		 public IActionResult Index()
+        private readonly ICartService _cartService;
+
+        public UserController(UserManager<AppUser> userManager,ICustomerService customerService, SignInManager<AppUser> signInManager, IPersonelService personelService
+, ICartService cartService)
+        {
+            _personelService = personelService;
+            _userManager = userManager;
+            _customerService = customerService;
+            _signInManager = signInManager;
+            _cartService = cartService;
+        }
+        public IActionResult Index()
         {
             return View();
         }
@@ -82,6 +86,7 @@ namespace Web.Controllers
                         IsDelete = false,
                         Adress = "AA",
                     };
+                    _cartService.InitializeCart(appUser.Id);
 
                     _customerService.Create(entity);
                     return RedirectToAction("Index", "CustomerPanel");
@@ -118,6 +123,7 @@ namespace Web.Controllers
                 await _signInManager.SignOutAsync();
                 await _signInManager.SignInAsync(user, true);
             }
+
             return RedirectToAction("Index", "CustomerPanel");
         }
         public IActionResult EditPassword()
@@ -250,40 +256,34 @@ namespace Web.Controllers
             if (user != null)
             {
                 string resetToken = await _userManager.GeneratePasswordResetTokenAsync(user);
-                byte[] tokenGeneratedBytes = Encoding.UTF8.GetBytes(resetToken);
-                var codeEncoded = WebEncoders.Base64UrlEncode(tokenGeneratedBytes);
-                MailMessage mail = new MailMessage
-                {
-                    From = new MailAddress("dilandilen12@outlook.com", "Şifre Güncelleme", Encoding.UTF8),
-                    Subject = "Şifre Güncelleme Talebi",
-                    IsBodyHtml = true,
-                    Body = $"<a target=\"_blank\" href=\"https:localhost:7071{Url.Action("UpdatePassword", "User", new { userId = user.Id, token = HttpUtility.UrlEncode(resetToken) })}\">Yeni şifre talebi için tıklayınız</a>"
-            };
+
+                MailMessage mail = new MailMessage();
+                mail.IsBodyHtml = true;
                 mail.To.Add(user.Email);
+
+             
+                mail.From = new MailAddress("dilandilen12@outlook.com", "Şifre Güncelleme", Encoding.UTF8);
+                mail.Subject = "Şifre Güncelleme Talebi";
+                mail.Body = $"<a target=\"_blank\" href=\"https://localhost:7071{Url.Action("UpdatePassword", "User", new { userId = user.Id, token = HttpUtility.UrlEncode(resetToken) })}\">Yeni şifre talebi için tıklayınız</a>";
+                mail.IsBodyHtml = true;
                 SmtpClient smtpClient = new SmtpClient
                 {
                     EnableSsl = true,
                     Host = "smtp-mail.outlook.com",
-                    Port = 587,   
-                    Timeout = 60000,  
+                    Port = 587,
+                    Timeout = 60000,
                     UseDefaultCredentials = false,
                     Credentials = new NetworkCredential("dilandilen12@outlook.com", "Ab121144.")
                 };
-
                 smtpClient.Send(mail);
                 smtpClient.Dispose();
                 ViewBag.State = true;
-
-
             }
-
-
-
-
             else
                 ViewBag.State = false;
 
             return View();
+          
         }
         public async Task<IActionResult> Profile()
         {

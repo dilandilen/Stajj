@@ -1,4 +1,5 @@
 ﻿using Business.Abstract;
+using DataAccess.Authentication;
 using Entity;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
@@ -8,7 +9,6 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using Web.Authentication;
 using Web.Models;
 using static iTextSharp.text.pdf.events.IndexEvents;
 
@@ -31,20 +31,7 @@ namespace web.Controllers
         public IActionResult Index()
         {
             var cart = _cartService.GetCartByUserId(_userManager.GetUserId(User));
-            return View(new CartModel()
-            {
-                CartId = cart.Id,
-                CartItems = cart.CartItems.Select(i => new CartItemModel()
-                {
-                    CartItemId = i.Id,
-                    ProductId = i.ProductId,
-                    Name = i.Product.ProductName,
-                    Price = (decimal)i.Product.Selling_price,
-                    ImageUrl = i.Product.imgurl,
-                    Quantity = i.Quantity
-
-                }).ToList()
-            });
+            return View(cart);
         }
         [HttpPost]
         public IActionResult AddToCart(int productId, int quantity)
@@ -65,20 +52,8 @@ namespace web.Controllers
         {
             var cart = _cartService.GetCartByUserId(_userManager.GetUserId(User));
             var orderModel = new OrderModel();
-            orderModel.CartModel = new CartModel()
-            {
-                CartId = cart.Id,
-                CartItems = cart.CartItems.Select(i => new CartItemModel()
-                {
-                    CartItemId = i.Id,
-                    ProductId = i.ProductId,
-                    Name = i.Product.ProductName,
-                    Price = (decimal)i.Product.Selling_price,
-                    ImageUrl = i.Product.imgurl,
-                    Quantity = i.Quantity
+            orderModel.CartModel = cart;
 
-                }).ToList()
-            };
             return View(orderModel);
         }
         [HttpPost]
@@ -88,19 +63,8 @@ namespace web.Controllers
                 var userId = _userManager.GetUserId(User);
 
                 var cart = _cartService.GetCartByUserId(userId);
-                entity.CartModel = new CartModel()
-                {
-                    CartId = cart.Id,
-                    CartItems = cart.CartItems.Select(i => new CartItemModel()
-                    {
-                        CartItemId = i.Id,
-                        ProductId = i.Product.ProductId,
-                        Name = i.Product.ProductName,
-                        Price = (decimal)i.Product.Cost_price,
-                        ImageUrl = i.Product.imgurl,
-                        Quantity = i.Quantity
-                    }).ToList()
-                };
+            entity.CartModel = cart;
+             
 
                 SaveOrder(entity, cart);
 
@@ -109,7 +73,6 @@ namespace web.Controllers
                 return View("Completed");
             
             
-                return View(entity);
             
 
         }
@@ -122,7 +85,8 @@ namespace web.Controllers
         {
             var order = new Order();
             order.OrderNumber = "A" + (new Random()).Next(1111, 9999).ToString();
-            order.Total = 15;
+            order.Total =(double)model.CartModel.CartItems.Sum(i => i.Product.Selling_price * i.Quantity);
+            ;
             order.OrderDate = DateTime.Now;
             order.OrderState = EnumOrderState.Bekleniyor;
             order.FirstName = model.FirstName;

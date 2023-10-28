@@ -13,15 +13,15 @@ using System;
 
 using Business.Concrete;
 using DataAccess.Abstract;
-using DataAccess.EntityFramework.EfCore;
+using DataAccess.Concrete.EntityFramework;
 using DataAccess.Concrete;
 using Microsoft.Extensions.DependencyInjection;
 using Business.Abstract;
 using Business.Extensions;
 using Business.Utilities.IoC;
 using Business.DependencyResolvers;
-using Web.Authentication;
 using Web.CustomValidations;
+using DataAccess.Authentication;
 
 namespace Web
 {
@@ -36,9 +36,14 @@ namespace Web
 
         public void ConfigureServices(IServiceCollection services)
 		{
+            string connectionString = Configuration.GetConnectionString("ConnectionStrings");
 
-			services.AddDbContext<AppDbContext>(options => options.UseSqlServer(Configuration["ConnectionStrings:SqlServerConnectionString"]));
-			services.AddIdentity<AppUser, AppRole>(options =>
+            services.AddDbContext<Context>(options => options.UseSqlServer(Configuration["ConnectionStrings:ConnectionStrings"]));
+
+
+
+
+            services.AddIdentity<AppUser, AppRole>(options =>
 			{
 				options.Password.RequiredLength = 5; 
 				options.Password.RequireNonAlphanumeric = false;
@@ -51,7 +56,7 @@ namespace Web
                  options .User.AllowedUserNameCharacters = "abcçdefghiıjklmnoöpqrsştuüvwxyzABCÇDEFGHIİJKLMNOÖPQRSŞTUÜVWXYZ0123456789-._@+";
 			}).AddPasswordValidator<CustomPasswordValidation>()
               .AddUserValidator<CustomUserValidation>()
-              .AddErrorDescriber<CustomIdentityErrorDescriber>().AddEntityFrameworkStores<AppDbContext>()
+              .AddErrorDescriber<CustomIdentityErrorDescriber>().AddEntityFrameworkStores<Context>()
               .AddDefaultTokenProviders(); ;
 
             services.ConfigureApplicationCookie(_ =>

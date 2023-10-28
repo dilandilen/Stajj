@@ -10,6 +10,10 @@ namespace Business.Abstract
 {
    public interface IProductService
     {
+        Task<byte[]> GenerateProductListPdf();
+
+        public IDataResult<List<Product>> Search(string keyword);
+
         int GetCount(Expression<Func<Product, bool>> filter = null);
         int GetTotalStock();
         IDataResult< List<Product>> GetProductsByLowStock(int minimumStock);
@@ -26,10 +30,9 @@ namespace Business.Abstract
         Iresult Create(Product entity);
         Iresult Delete(Product entity);
 
-        IDataResult<List<Product>> GetProductsByCategory(string category, int page, int pageSize);
 
         IDataResult<Product> GetProductDetails(int id);
-
+        IDataResult<List<Product>> Getbycategory(int id);
         int GetCountByCategory(string category);
         IDataResult<Product> GetByIdWithCategories(int id);
         Iresult Update(Product entity, int[] categoryIds);

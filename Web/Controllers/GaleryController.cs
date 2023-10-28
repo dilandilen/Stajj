@@ -20,11 +20,8 @@ namespace Web.Controllers
             var categories = _categoryService.GetAll();
             if (categories.Success)
             {
-                var viewModel = new CategoryListViewModel
-                {
-                    Categories = categories.Data
-                };
-                return View(viewModel);
+                
+                return View(categories.Data);
             }
             return BadRequest();
         }

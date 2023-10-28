@@ -17,17 +17,8 @@ namespace Entity
         public int Quantity { get; set; }
         public decimal TotalAmount { get; set; }
         public decimal Price
-        {
-            get
-            {
-                if (Product != null)
-                {
-                    return Product.Selling_price;
-                }
-                return 0;
-            }
-            set { }
-        }
+        { get; set; }
+        
         public int ProductId { get; set; }
         public int CustomerId { get; set; }
         public int PersonelId { get; set; }

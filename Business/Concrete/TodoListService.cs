@@ -32,7 +32,7 @@ namespace Business.Concrete
 
         }
 
-        public IDataResult< List<TodoList>> GetAll(Expression<Func<TodoList, bool>> filter = null)
+        public IDataResult< List<TodoList>> GetAll(Expression<Func<TodoList, bool>>? filter = null)
         {
             return new SuccessDataResult<List<TodoList>>( _todoListDal.GetAll(filter));
         }

@@ -23,84 +23,52 @@ namespace Web.Controllers
 
         public ActionResult Index()
         {
-            var customers = _customerService.GetAll();
-            var viewModel = new CustomerListModel
-            {
-                Customers = customers.Data
-            };
-            return View(viewModel);
+            var customers = _customerService.GetAll().Data;
+           
+            return View(customers);
         }
 
         [HttpGet]
         public ActionResult CustomerCreate()
         {
-            var model = new CustomerModel();
-            return View(model);
+            return View();
         }
 
         [HttpPost]
-        public ActionResult CustomerCreate(CustomerModel model)
+        public ActionResult CustomerCreate(Customer model)
         {
 
-            var customer = new Customer
-            {
-                Name = model.Name,
-                SurName = model.SurName,
-                Email = model.Email,
-                Phone = model.Phone,
-                Adress = model.Adress,
-                IsDelete = false
-
-        };
-          var result=  _customerService.Create(customer);
+            var result=  _customerService.Create(model);
             if (result.Success)
             {
-                return RedirectToAction("Index");
+             return RedirectToAction("Index");
             } return BadRequest();
         }
-      
+
         [HttpGet]
         public ActionResult CustomerUpdate(int id)
         {
             var customer = _customerService.GetById(id);
-   
-            if (customer.Success)
-            {
-                var model = new CustomerModel
-                {
-                    CustomerId = customer.Data.CustomerId,
-                    Name = customer.Data.Name,
-                    SurName = customer.Data.SurName,
-                    Email = customer.Data.Email,
-                    Phone = customer.Data.Phone,
-                    Adress = customer.Data.Adress
-                };
 
-                return View(model);
+            if (customer.Success)
+            { return View(customer.Data);
             }
             return BadRequest();
           
         }
 
         [HttpPost]
-        public IActionResult CustomerUpdate(CustomerModel model)
+        public IActionResult CustomerUpdate(Customer model)
         {
            
-                var customer = _customerService.GetById(model.CustomerId);
-                if (customer.Success)
-            {
-                customer.Data.Name = model.Name;
-                customer.Data.SurName = model.SurName;
-                customer.Data.Email = model.Email;
-                customer.Data.Phone = model.Phone;
-                customer.Data.Adress = model.Adress;
-                _customerService.Update(customer.Data);
+               
+               
+                _customerService.Update(model);
 
                 return RedirectToAction("Index");
 
-            }
+            
 
-            return BadRequest();
         
         }
         [HttpPost]
@@ -125,16 +93,12 @@ namespace Web.Controllers
             var customer = _customerService.GetByIdWithSales(id);
             if (customer.Success)
             {
-
+                ViewBag.customer = customer.Data.Name;
                 var customerSales = _saleTransService.GetSalesByCustomer(id);
  
-                var viewModel = new CustomerSalesModel
-                {
-                    Customer = customer.Data,
-                    SaleTransactions = customerSales.Data
-                };
+                
 
-                return View(viewModel);
+                return View(customerSales.Data);
             }
             return BadRequest();
             

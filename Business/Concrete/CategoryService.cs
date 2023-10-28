@@ -5,6 +5,7 @@ using Business.Utilities.Result;
 using Business.ValidationRules.FluentValidation;
 using DataAccess.Abstract;
 using Entity;
+using Microsoft.AspNetCore.Http;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -39,12 +40,7 @@ namespace Business.Concrete
 
         }
 
-        public Iresult DeleteFromCategory(int categoryId, int productId)
-        {
-            _categoryDal.DeleteFromCategory(categoryId, productId);
-            return new SuccessResult();
-
-        }
+       
         public IDataResult< List<Category>> GetAll(Expression<Func<Category, bool>> filter = null)
         {
             return new SuccessDataResult<List<Category>>(_categoryDal.GetAll(filter))    ;
@@ -83,10 +79,24 @@ namespace Business.Concrete
         }
         [ValidationAspect(typeof(CategoryValidator), Priority = 1)]
 
-        public Iresult Update(Category entity)
+        public Iresult Update(Category entity, IFormFile file)
         {
-           
-                _categoryDal.Update(entity);
+            if (file != null && file.Length > 0)
+            {
+
+
+                string uniqueFileName = Guid.NewGuid().ToString() + "_" + file.FileName;
+                string filePath = Path.Combine("wwwroot", "images", uniqueFileName);
+
+                using (var stream = new FileStream(filePath, FileMode.Create))
+                {
+                    file.CopyTo(stream);
+                }
+
+                entity.Imgurl = "/images/" + uniqueFileName;
+            }
+
+            _categoryDal.Update(entity);
             return new SuccessResult();
 
 

@@ -28,7 +28,7 @@ namespace Web.Models
         public string Brandname { get; set; }
 
         [Display(Name = "Product Image")]
-    public IFormFile ProductImage { get; set; }
+        public IFormFile ProductImage { get; set; }
 
         public ICollection<SaleTransaction> SaleTransactions { get; set; }
         public List<Category> SelectedCategories { get; set; }

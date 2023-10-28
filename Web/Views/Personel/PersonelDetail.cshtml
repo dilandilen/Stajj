@@ -1,4 +1,4 @@
-﻿@model PersonelListModel
+﻿@model IEnumerable<Personel>
 @{
     ViewData["Title"] = "PersonelDetail";
     Layout = "~/Views/Shared/_AdminLayout.cshtml";
@@ -49,7 +49,7 @@
       <div class="card card-solid">
         <div class="card-body pb-0">
           <div class="row d-flex align-items-stretch">
-              @foreach(var item in Model.Personels){
+              @foreach(var item in Model){
             <div class="col-12 col-sm-6 col-md-4 d-flex align-items-stretch">
               <div class="card bg-light">
                 <div class="card-header text-muted border-bottom-0">

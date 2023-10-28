@@ -1,4 +1,4 @@
-﻿@model List<OrderListModel>
+﻿@model List<Order>
 
 
 
@@ -45,7 +45,7 @@ else
                     <td>@orderModel.FirstName @orderModel.LastName</td>
                     <td>@orderModel.OrderItems.Sum(item => item.Price * item.Quantity)</td>
                     <td>
-                        <a href="@Url.Action("OrderDetail", "Order", new { id = orderModel.OrderId })">Detaylar</a>
+                        <a href="@Url.Action("OrderDetail", "Order", new { id = orderModel.Id })">Detaylar</a>
                     </td>
                 </tr>
             }

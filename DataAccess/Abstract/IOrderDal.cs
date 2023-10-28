@@ -9,6 +9,12 @@ namespace DataAccess.Abstract
 {
     public interface IOrderDal : IRepository<Order>
     {
+        List<Order> BekleyenSiparişler();
+        List<Order> Kargo();
+        List<Order> tamam();
+        public List<Order> paket();
+
+
          List<Order> GetAllWithOrderLines();
 
         Order GetByIdWithOrderItems(int orderıd);

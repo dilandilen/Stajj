@@ -1,0 +1,8 @@
+﻿@model IEnumerable<Category>
+<div class="navbar-nav w-100 overflow-hidden" style="height: 410px">
+    @foreach (var k in Model)
+    {
+        <a href="@Url.Action("ProductList", "CustomerPanel", new { id = @k.CategoryID })" class="nav-item nav-link">@k.CategoryName</a>
+    }
+</div>
+

@@ -11,6 +11,10 @@ namespace Business.Abstract
 {
     public interface IOrderService
     {
+        List<Order> BekleyenSiparişler();
+        List<Order> Kargo();
+        List<Order> tamam();
+        public List<Order> paket();
         List<Order> GetAllWithOrderLines();
         List<Order> GetAll(Expression<Func<Order, bool>> filter = null);
         IDataResult<Order> GetById(int id);

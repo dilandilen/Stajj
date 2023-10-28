@@ -96,16 +96,22 @@
                 <li class="list-group-item d-flex justify-content-between">
                     <div>
                         <h6 class="my-0">
-                            @item.Name
+                            @item.Product.ProductName
                             <small>x @item.Quantity</small>
                         </h6>
                     </div>
-                    <span class="text-muted">@item.Price TL</span>
+                    <span class="text-muted">@item.Product.Selling_price TL</span>
                 </li>
+            }
+            @{
+                decimal TotalPrice()
+                {
+                    return Model.CartModel.CartItems.Sum(i => i.Product.Selling_price * i.Quantity) + 10.0M;
+                }
             }
             <li class="list-group-item d-flex justify-content-between">
                 <span>Total (TL)</span>
-                <strong>@Model.CartModel.TotalPrice() TL</strong>
+                <strong>@TotalPrice() TL</strong>
             </li>
         </ul>
 

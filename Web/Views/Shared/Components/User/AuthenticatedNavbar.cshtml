@@ -1,0 +1,29 @@
+﻿@using System.Security.Claims;
+@*
+    For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
+*@
+@{
+}
+-
+    <div class="nav-item dropdown">
+
+        <a href="@Url.Action(  "User","EditProfile")" class="nav-link dropdown-toggle" data-toggle="dropdown">Hesabım</a>
+        <div class="dropdown-menu rounded-0 m-0">
+            <a href="@Url.Action(  "EditProfile","User")" class="dropdown-item">Profil Ayarları</a>
+            <a href="@Url.Action(  "Profile","User")" class="dropdown-item">Profilim</a>
+            <a href="@Url.Action(  "EditPassword","User")" class="dropdown-item">Şifreyi değiştir</a>
+
+            <a href="checkout.html" class="dropdown-item">Begendiklerim</a>
+            @if (User.HasClaim(x => x.Type == ClaimTypes.Role && (x.Value == "Admin" || x.Value == "Admin1" || x.Value == "Admin3")))
+            {
+                <a href="@Url.Action(  "Index","Category")" class="dropdown-item">Admin</a>
+
+            }
+            <a asp-route-returnurl="/CustomerPanel/Index" asp-controller="User" asp-action="logout">Çıkış yap</a>
+
+        </div>
+    </div>
+
+
+
+

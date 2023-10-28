@@ -32,49 +32,41 @@ namespace Web.Controllers
         public IActionResult Index()
         {
             var sales = _saleTransactionService.Getallswrelate();
-            var viewModel = new SaleTransactionListModel
-            {
-                SaleTransactions = sales.Data
-            };
-            return View(viewModel);
+           
+            return View(sales.Data);
 
 
         }
         [HttpGet]
         public IActionResult SalesAdd()
         {
-            var personel = _personelService.GetAll().Data
-                .Select(e => new SelectListItem
-                {
-                    Text = $"{e.Name} {e.SurName}",
-                    Value = e.PersonelId.ToString()
-                })
-                .ToList();
-            ViewBag.VPersonel = new SelectList(personel, "Value", "Text");
-
-            var customers = _customerService.GetAll().Data
-                .Select(c => new SelectListItem
-                {
-                    Text = $"{c.Name} {c.SurName}",
-                    Value = c.CustomerId.ToString()
-                })
-                .ToList();
-            ViewBag.VCustomer = new SelectList(customers, "Value", "Text");
-
-            var products = _productService.GetAll().Data
-                .Select(p => new SelectListItem
-                {
-                    Text = p.ProductName,
-                    Value = p.ProductId.ToString()
-                })
-                .ToList();
-            ViewBag.VProduct = new SelectList(products, "Value", "Text");
+            List<SelectListItem> urunler = (from x in _productService.GetAll().Data.ToList()
+                                            select new SelectListItem
+                                            {
+                                                Text = x.ProductName,
+                                                Value = x.ProductId.ToString()
+                                            }).ToList();
+            List<SelectListItem> cariler = (from x in _customerService.GetAll().Data.ToList()
+                                            select new SelectListItem
+                                            {
+                                                Text = x.Name + " " + x.SurName,
+                                                Value = x.CustomerId.ToString()
+                                            }).ToList();
+            List<SelectListItem> personeller = (from x in _personelService.GetAll().Data.ToList()
+                                                select new SelectListItem
+                                                {
+                                                    Text = x.Name + " " + x.SurName,
+                                                    Value = x.PersonelId.ToString()
+                                                }).ToList();
+            ViewBag.VProduct = urunler;
+            ViewBag.VCustomer = cariler;
+            ViewBag.Vpersonel = personeller;
 
             return View();
         }
 
         [HttpPost]
-        public IActionResult SalesAdd(SaleTransactionModel salesMove)
+        public IActionResult SalesAdd(SaleTransaction salesMove)
         {
             var product=_productService.GetById(salesMove.ProductId).Data;
             var sales = new SaleTransaction
@@ -110,24 +102,12 @@ namespace Web.Controllers
             ViewBag.Product = _productService.GetAll();
             ViewBag.Personel = _personelService.GetAll();
             ViewBag.Customer = _customerService.GetAll();
-            var model = new SaleTransactionModel
-            {
-                ProductId = sales.Data.ProductId,
-                CustomerId = sales.Data.CustomerId,
-                PersonelId = sales.Data.PersonelId,
-                Price = sales.Data.Price,
-                Date= sales.Data.Date,
-                TotalAmount = sales.Data.TotalAmount,
-                Quantity = sales.Data.Quantity,
-                Product = sales.Data.Product,
-                Customer = sales.Data.Customer,
-                Personel = sales.Data.Personel
-            };
+            
 
-            return View(model);
+            return View(sales);
         }
         [HttpPost]
-        public IActionResult SalesUpdate(SaleTransactionModel model)
+        public IActionResult SalesUpdate(SaleTransaction model)
         {
             var sales = _saleTransactionService.GetByIdWithAllRelatives(model.SalesId);
             sales.Data.Price = model.Price;

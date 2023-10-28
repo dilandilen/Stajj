@@ -2,11 +2,12 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using DataAccess.Authentication;
+using Entity.dto;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
-using Web.Authentication;
-using Web.Models;
+
 
 namespace AspNetCoreIdentityExample.Controllers
 {

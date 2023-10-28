@@ -9,6 +9,7 @@ using iTextSharp.text.pdf;
 using Web.Models;
 using Business.Abstract;
 using Microsoft.AspNetCore.Authorization;
+using Business.Concrete;
 
 namespace Web.Controllers
 {
@@ -29,34 +30,16 @@ namespace Web.Controllers
         public IActionResult Index()
         {
             var products = _productService.GetAllWithCategories();
-            var viewModel = new ProductListModel
-            {
-                Products = products.Data
-            };
-            return View(viewModel);
+            if (products.Success)
+                return View(products.Data);
+            else return BadRequest();
         }
 
         public async Task<IActionResult> ProductListPdf()
         {
-            var products = _productService.GetAll();
+            var pdfBytes = await _productService.GenerateProductListPdf(); 
 
-            using (MemoryStream memoryStream = new MemoryStream())
-            {
-                Document document = new Document(PageSize.A4);
-                PdfWriter writer = PdfWriter.GetInstance(document, memoryStream);
-
-                document.Open();
-
-                foreach (var product in products.Data)
-                {
-                    document.Add(new Paragraph(product.ProductName));
-                    document.Add(new Paragraph(product.Stock.ToString()));
-                }
-
-                document.Close();
-
-                return File(memoryStream.ToArray(), "application/pdf", "ProductList.pdf");
-            }
+            return File(pdfBytes, "application/pdf", "ProductList.pdf");
         }
 
         [HttpGet]
@@ -68,23 +51,14 @@ namespace Web.Controllers
         }
 
         [HttpPost]
-        public IActionResult CreateProduct(ProductModel model)
+        public IActionResult CreateProduct(Product model)
         {
 
-            var product = new Product
-            {
-                ProductName = model.ProductName,
-                Stock = model.Stock,
-                Cost_price = model.Cost_price,
-                Selling_price = model.Selling_price,
-                State = model.State,
-                imgurl = model.imgurl,
-                Brandname = model.Brandname
-            };
+            
 
 
 
-            _productService.Create(product);
+            _productService.Create(model);
 
             return RedirectToAction("Index");
 
@@ -93,16 +67,10 @@ namespace Web.Controllers
         [HttpGet]
         public IActionResult ProductUpdate(int? id)
         {
-            if (id == null)
-            {
-                return NotFound();
-            }
+            
 
             var product = _productService.GetByIdWithCategories((int)id);
-            if (product == null)
-            {
-                return NotFound();
-            }
+
             ViewBag.Categories = _categoryService.GetAll().Data;
 
                 var model = new ProductModel
@@ -115,7 +83,7 @@ namespace Web.Controllers
                     State = product.Data.State,
                     imgurl = product.Data.imgurl,
                     Brandname = product.Data.Brandname,
-                    SelectedCategories = product.Data.ProductCategories.Select(c => c.Category).ToList(),
+                   SelectedCategories = product.Data.ProductCategories.Select(c => c.Category).ToList(),
                 };
 
             return View(model);
@@ -124,20 +92,18 @@ namespace Web.Controllers
         [HttpPost]
         public async Task<IActionResult> ProductUpdate(ProductModel model, int[] categoryIds)
         {
-            
-                var product = _productService.GetByIdWithCategories(model.ProductId);
-                if (product == null)
-                {
-                    return NotFound();
-                }
+            var product = _productService.GetByIdWithCategories(model.ProductId);
+            if (product == null)
+            {
+                return NotFound();
+            }
 
-                product.Data.ProductName = model.ProductName;
-                product.Data.Stock = model.Stock;
-                product.Data.Cost_price = model.Cost_price;
-                product.Data.Selling_price = model.Selling_price;
-                product.Data.State = model.State;
-                product.Data.imgurl = model.imgurl;
-                product.Data.Brandname = model.Brandname;
+            product.Data.ProductName = model.ProductName;
+            product.Data.Stock = model.Stock;
+            product.Data.Cost_price = model.Cost_price;
+            product.Data.Selling_price = model.Selling_price;
+            product.Data.State = model.State;
+            product.Data.Brandname = model.Brandname;
 
             if (model.ProductImage != null && model.ProductImage.Length > 0)
             {
@@ -152,14 +118,11 @@ namespace Web.Controllers
                 product.Data.imgurl = "/images/" + uniqueFileName;
             }
 
-
-
             _productService.Update(product.Data, categoryIds);
 
-                return RedirectToAction("Index");
-            
-          
+            return RedirectToAction("Index");
         }
+
 
 
         [HttpPost]

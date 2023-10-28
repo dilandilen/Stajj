@@ -1,5 +1,4 @@
-﻿@using Web.Models
-@model ProductListModel
+﻿@model IEnumerable<Product>
 
 @{
     ViewData["Title"] = "Index";
@@ -23,7 +22,7 @@
         <th>Sil</th>
         <th>satıs</th>
     </tr>
-    @foreach (var product in Model.Products)
+    @foreach (var product in Model)
     {
         <tr>
             <td>@product.ProductId</td>

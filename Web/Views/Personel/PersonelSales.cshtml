@@ -1,4 +1,4 @@
-﻿@model PersonelSalesModel
+﻿@model IEnumerable<SaleTransaction>
 @{
     ViewData["Title"] = "PersonelSales";
     Layout = "~/Views/Shared/_AdminLayout.cshtml";
@@ -6,7 +6,7 @@
 
 <ol class="breadcrumb mb-4">
     <li class="breadcrumb-item active">
-        <a href="/Personel/Index">Personel</a> / @ViewBag.VPersonel
+        <a href="/Personel/Index">Personel</a> / @ViewBag.personel
     </li>
 </ol>
 
@@ -24,7 +24,7 @@
         </tr>
     </thead>
     <tbody>
-        @foreach (var saleTransaction in Model.SaleTransactions)
+        @foreach (var saleTransaction in Model)
         {
             <tr>
                 <td>@saleTransaction.SalesId</td>

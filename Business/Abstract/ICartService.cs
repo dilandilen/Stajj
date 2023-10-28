@@ -9,11 +9,10 @@ namespace Business.Abstract
 {
     public interface ICartService
     {
-        void InitializeCart(string userId);
+        void InitializeCart(int userId);
         Cart GetCartByUserId(string userId);
         void AddToCart(string userId,int productId,int quantity);
         void ClearCart(string cartId);
-
         void DeleteFromCart(string userId,int productId);
     }
 }

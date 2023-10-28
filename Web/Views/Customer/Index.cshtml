@@ -1,4 +1,4 @@
-﻿@model CustomerListModel
+﻿@model IEnumerable<Entity.Customer>
 @{
     ViewData["Title"] = "Index";
     Layout = "~/Views/Shared/_AdminLayout.cshtml";
@@ -26,7 +26,7 @@
         </tr>
     </thead>
     <tbody>
-        @foreach (var customer in Model.Customers)
+        @foreach (var customer in Model)
         {
             <tr>
                 <td>@customer.CustomerId</td>

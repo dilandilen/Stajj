@@ -12,6 +12,8 @@ using Business.Aspect.Autofac.Validation;
 using Business.Constants;
 using Business.Aspect.Autofac.Transaction;
 using Business.Aspects.Autofac.Caching;
+using iTextSharp.text.pdf;
+using iTextSharp.text;
 
 namespace Business.Concrete
 {
@@ -33,6 +35,29 @@ namespace Business.Concrete
         {
             var brandCount = _productDal.GetAll().Select(p => p.Brandname).Distinct().Count();
             return brandCount;
+        }
+        public async Task<byte[]> GenerateProductListPdf()
+        {
+            var products = GetAll();
+
+            using (MemoryStream memoryStream = new MemoryStream())
+            {
+                Document document = new Document(PageSize.A4);
+                PdfWriter writer = PdfWriter.GetInstance(document, memoryStream);
+
+                document.Open();
+
+                foreach (var product in products.Data)
+                {
+                    document.Add(new Paragraph(product.ProductName));
+                    document.Add(new Paragraph(product.Stock.ToString()));
+                    document.Add(new Paragraph(product.Selling_price.ToString()));
+                }
+
+                document.Close();
+
+                return memoryStream.ToArray();
+            }
         }
 
         public IDataResult<List<Product>> GetProductsByLowStock(int minimumStock)
@@ -66,7 +91,13 @@ namespace Business.Concrete
             var products = _productDal.GetAll(filter);
             return new SuccessDataResult<List<Product>>(products);
         }
-
+        public IDataResult<List<Product>> Search(string keyword)
+        {
+            var matchingProducts = GetAllWithCategories().Data.Where(p => p.ProductName.Contains(keyword, StringComparison.OrdinalIgnoreCase) ||
+            p.Brandname.Contains(keyword, StringComparison.OrdinalIgnoreCase))
+             .OrderBy(p => p.ProductName).ThenBy(p => p.Brandname).ToList();
+            return new SuccessDataResult < List<Product >> (matchingProducts);
+        }
         public IDataResult<Product> GetById(int id)
         {
             var product = _productDal.GetById(id);
@@ -106,10 +137,14 @@ namespace Business.Concrete
         }
         [CacheAspect(duration: 1)]
 
-        public IDataResult<List<Product>> GetProductsByCategory(string category, int page, int pageSize)
+        public IDataResult<List<Product>> Getbycategory(int id)
         {
-            var products = _productDal.GetProductsByCategory(category, page, pageSize);
-            return new SuccessDataResult<List<Product>>(products);
+            var productsInCategory =
+                GetAllWithCategories()
+                .Data
+                .Where(p => p.ProductCategories.Any(pc => pc.CategoryID == id))
+                .ToList();
+            return new SuccessDataResult<List<Product>>(productsInCategory);
         }
 
         public IDataResult<List<Product>> List()

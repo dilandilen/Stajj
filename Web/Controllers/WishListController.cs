@@ -1,68 +1,38 @@
-﻿using DataAccess.Concrete;
-using Entity;
+﻿using Business.Abstract;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
-using System;
-using System.Linq;
+using Microsoft.AspNetCore.Authorization;
+using DataAccess.Authentication;
 
-public class WishlistController : Controller
+namespace Web.Controllers
 {
-    private readonly Context _context; // DbContext'e uygun bağlamı ekleyin
-
-    public WishlistController(Context context)
+    public class WishlistController: Controller
     {
-        _context = context;
-    }
-
-    // Kullanıcının Wishlist'ini görüntüleme
-    public IActionResult Index(string userId)
-    {
-        var wishlist = _context.WishlistItems
-            .Where(w => w.UserId == userId)
-            .ToList();
-
-        return View(wishlist);
-    }
-
-    // Ürünü Wishlist'e ekleme
-    [HttpPost]
-    public IActionResult AddToWishlist(string userId, int productId)
-    {
-        var existingItem = _context.WishlistItems
-            .FirstOrDefault(w => w.UserId == userId && w.ProductId == productId);
-
-        if (existingItem != null)
+        private UserManager<AppUser> _userManager;
+        private IWishlistService _wishlistService;
+       public WishlistController(UserManager<AppUser> userManager, IWishlistService wishlistService)
         {
-            // Ürün zaten Wishlist'te, burada isteğe bağlı olarak bir mesaj gönderebilirsiniz.
+            _userManager = userManager;
+            _wishlistService = wishlistService;
         }
-        else
+        public IActionResult Index()
         {
-            var wishlistItem = new WishlistItem
-            {
-                UserId = userId,
-                ProductId = productId,
-                AddedDate = DateTime.Now
-            };
-
-            _context.WishlistItems.Add(wishlistItem);
-            _context.SaveChanges();
+            var wish = _wishlistService.GetByUserId(_userManager.GetUserId(User));
+            return View(wish);
         }
-
-        return RedirectToAction("Index", new { userId });
-    }
-
-    // Ürünü Wishlist'ten kaldırma
-    [HttpPost]
-    public IActionResult RemoveFromWishlist(string userId, int wishlistItemId)
-    {
-        var itemToRemove = _context.WishlistItems
-            .FirstOrDefault(w => w.UserId == userId && w.Id == wishlistItemId);
-
-        if (itemToRemove != null)
+        [HttpPost]
+        public IActionResult AddToWishlist(int productId)
         {
-            _context.WishlistItems.Remove(itemToRemove);
-            _context.SaveChanges();
+            var userId = _userManager.GetUserId(User);
+            _wishlistService.AddToWishlist(userId, productId);
+            return RedirectToAction("Index");
         }
-
-        return RedirectToAction("Index", new { userId });
+        [HttpPost]
+        public IActionResult DeleteFromCart(int productId)
+        {
+            var userId = _userManager.GetUserId(User);
+            _wishlistService.DeleteFromWishlist(userId, productId);
+            return RedirectToAction("Index");
+        }
     }
 }

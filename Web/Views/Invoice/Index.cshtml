@@ -1,4 +1,4 @@
-﻿@model InvoiceListModel
+﻿@model IEnumerable<Entity.Invoice>
 @{
     ViewData["Title"] = "Index";
     Layout = "~/Views/Shared/_AdminLayout.cshtml";
@@ -35,7 +35,7 @@
         </tr>
     </thead>
     <tbody>
-        @foreach (var item in Model.Invoices)
+        @foreach (var item in Model)
         {
             <tr>
                 <th scope="row">@item.InvoiceId</th>

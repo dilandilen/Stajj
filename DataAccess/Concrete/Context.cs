@@ -1,21 +1,27 @@
-﻿using Entity;
+﻿using DataAccess.Authentication;
+using Entity;
+using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Options;
+using System;
 
 namespace DataAccess.Concrete
 {
-    public class Context : DbContext
+    public class Context : IdentityDbContext<AppUser, AppRole, int>
     {
-        protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
-        {
-            optionsBuilder.UseSqlServer(@"Server=DILAN\SQLEXPRESS;Database=StajData;integrated security=true;TrustServerCertificate=True;
-");
-        }
+
+        public Context(DbContextOptions<Context> dbContext) : base(dbContext) { }
+
+
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             modelBuilder.Entity<ProductCategory>()
                     .HasKey(c => new { c.CategoryID, c.ProductId });
+            base.OnModelCreating(modelBuilder);
+
         }
+
 
         public DbSet<Product> Products { get; set; }
         public DbSet<Category> Categories { get; set; }
@@ -27,12 +33,16 @@ namespace DataAccess.Concrete
         public DbSet<Expense> Expenses { get; set; }
         public DbSet<Order> Orders { get; set; }
         public DbSet<TodoList> TodoLists { get; set; }
-        public DbSet<Admin> Admins { get; set; }
         public DbSet<OrderItem> OrderItems { get; set; }
-        public DbSet<Cart> Carts { get; set; }
-        public DbSet<CartItem>CartItems { get; set; }
-        public DbSet<WishlistItem> WishlistItems { get; set; }
-
+     
+        public DbSet<WishlistItem> Items { get; set; }
+        public DbSet<Wishlist> Wishlists { get; set; }
+       public DbSet<Cart> Cartss { get; set; }
+        public DbSet<CartItem> CartItems { get; set; }
+        /*protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
+        {
+            optionsBuilder.UseSqlServer(@"Server=DILAN\SQLEXPRESS;Database=StajData;integrated security=true;TrustServerCertificate=True;");
+        }*/
 
 
 

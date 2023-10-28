@@ -37,11 +37,8 @@ namespace Web.Controllers
             ViewBag.d3 = deger2;
             var todo = _todoListService.GetAll();
 
-            var viewModel = new TodoListViewModel
-            {
-               TodoLists=todo.Data,
-            };
-            return View(viewModel);
+
+            return View(todo.Data);
         }
         [HttpGet]
         public ActionResult TodoListAdd()
@@ -51,17 +48,10 @@ namespace Web.Controllers
         }
 
         [HttpPost]
-        public ActionResult TodoListAdd(TodoListModel model)
+        public ActionResult TodoListAdd(TodoList model)
         {
-            var entity = new TodoList
-            {
-               Title  = model.Title,
-               Hour=model.Hour,
-               Status=true,
-               Date=model.Date,
-
-            };
-            _todoListService.Create(entity);
+            
+            _todoListService.Create(model);
             return RedirectToAction("Index");
 
         }
